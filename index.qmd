@@ -1,0 +1,15 @@
+---
+title: "Valeriia Frolova"
+---
+
+# Short Bio
+
+For more than 7 years, I've been optimizing websites and elevating brands through targeted SEO strategies. To complement my experience with advanced analytical skills, I'm pursuing an MSBA at Baruch College, driven by a passion for data-driven decisions.
+
+![](images/headshot.jpg){width=200}
+
+You can view some of [my ML projects](https://whaleron.pythonanywhere.com/).
+
+Connect with me on: 
+[X](https://x.com/whaleron_)
+& [Linkedin](https://www.linkedin.com/in/valeriia-frolova-b9b1b5152/).

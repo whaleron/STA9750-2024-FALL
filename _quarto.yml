@@ -7,10 +7,13 @@ website:
   description:
     Course Projects for STA 9750 at Baruch College
   site-url: "https://whaleron.github.io/STA9750-2024-FALL/"
+  repo-url: "https://github.com/whaleron/STA9750-2024-FALL"
   navbar:
     background: primary
     search: false
-    
+    right:
+      - text: "Mini-project 1"
+        href: "./mp01.html"
 format:
   html:
     theme: litera

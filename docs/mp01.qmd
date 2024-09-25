@@ -40,7 +40,7 @@ if(!file.exists("2022_fare_revenue.xlsx")){
     download.file("http://www.transit.dot.gov/sites/fta.dot.gov/files/2024-04/2022%20Fare%20Revenue.xlsx", 
                   destfile="2022_fare_revenue.xlsx", 
                   quiet=FALSE, 
-                  method="wget")
+                )
 }
 FARES <- readxl::read_xlsx("2022_fare_revenue.xlsx") |>
     select(-`State/Parent NTD ID`, 
@@ -74,7 +74,7 @@ if(!file.exists("2022_expenses.csv")){
     download.file("https://data.transportation.gov/api/views/dkxx-zjd6/rows.csv?date=20231102&accessType=DOWNLOAD&bom=true&format=true", 
                   destfile="2022_expenses.csv", 
                   quiet=FALSE, 
-                  method="wget")
+                 )
 }
 EXPENSES <- readr::read_csv("2022_expenses.csv") |>
     select(`NTD ID`, 
@@ -115,7 +115,7 @@ if(!file.exists("ridership.xlsx")){
   download.file("https://www.transit.dot.gov/sites/fta.dot.gov/files/2024-09/July%202024%20Complete%20Monthly%20Ridership%20%28with%20adjustments%20and%20estimates%29_240903.xlsx", 
                 destfile="ridership.xlsx", 
                 quiet=FALSE, 
-                method="wget")
+              )
 }
 TRIPS <- readxl::read_xlsx("ridership.xlsx", sheet="UPT") |>
   filter(`Mode/Type of Service Status` == "Active") |>
@@ -218,7 +218,7 @@ most_vrm_agency <- USAGE |>
   slice(1) #top result
 ```
 
-The **MTA New York City Transit** had the highest total Vehicle Revenue Miles(VRM) in the dataset, with a total of **10,832,855,350 VRM** – the largest transit agency in terms of the distance its vehicles traveled in revenye service.
+The **MTA New York City Transit** had the highest total Vehicle Revenue Miles(VRM) in the dataset, with a total of **10,832,855,350 VRM** – the largest transit agency in terms of the distance its vehicles traveled in revenue service.
 
 ### [Question 2.]{.underline} What transit mode had the most total VRM in our data set?
 

@@ -18,3 +18,4 @@ format:
   html:
     theme: litera
     toc: false
+    self-contained: true

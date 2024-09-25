@@ -5,7 +5,7 @@ editor: visual
 
 This project is inspired from [CityNerd Youtube channel](https://www.youtube.com/@CityNerd) and focuses on farebox recovery - the percentage of a transit system's revenue that comes from fares instead of taxes. The data for this analysis comes from the [National Transit Database](https://www.transit.dot.gov/ntd)(NTD). This mini-project analyzes farebox revenues, total trips, vehicle miles traveled and operating expenses for public transit systems in the U.S. in 2022.
 
-Key data sources:
+Key data sources used:
 
 -   [2022 Fare Revenue Table](https://www.transit.dot.gov/ntd/data-product/2022-annual-database-fare-revenues)
 

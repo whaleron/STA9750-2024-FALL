@@ -167,7 +167,7 @@ library(DT)
 
 -   `mutate` helps to convert the `month` column to a character format, ensuring it's one format for further analysis;
 
--   `DT::datatable()` gives a web-like interactive table for a sampled dataset for filtering, sorting etc., ensure that `DT` library is installed, if not use `install.packages("DT")` function from the previous step;
+-   `DT::datatable()` gives a web-like interactive table for a sampled dataset for filtering, sorting etc., ensure that `DT` library is installed, if not use `install.packages("DT")` function from the previous step.
 
 ```{r, echo=TRUE, message=FALSE}
 sample_n(USAGE, 1000) |> 

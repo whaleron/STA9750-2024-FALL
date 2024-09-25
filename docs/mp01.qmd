@@ -216,8 +216,9 @@ most_vrm_agency <- USAGE |>
   summarize(total_VRM = sum(VRM, na.rm = TRUE)) |>
   arrange(desc(total_VRM)) |>
   slice(1) #top result
-most_vrm_agency
 ```
+
+The **MTA New York City Transit** had the highest total Vehicle Revenue Miles(VRM) in the dataset, with a total of **10,832,855,350 VRM** – the largest transit agency in terms of the distance its vehicles traveled in revenye service.
 
 ### [Question 2.]{.underline} What transit mode had the most total VRM in our data set?
 
@@ -229,8 +230,9 @@ most_vrm_mode <- USAGE |>
   summarize(total_VRM = sum(VRM, na.rm = TRUE)) |>
   arrange(desc(total_VRM)) |>
   slice(1) #top result
-most_vrm_mode
 ```
+
+The **Bus** has the highest total VRM of **49,444,494,088**. This transit mode is usually common across cities.
 
 ### [Question 3.]{.underline} How many trips were taken on the NYC Subway (Heavy Rail) in May 2024?
 
@@ -240,8 +242,9 @@ The code below calculates MTA NYC Transit trips taken by Heavy Rail mode for the
 nyc_subway_may2024 <- USAGE |>
   filter(Agency == "MTA New York City Transit", Mode == "Heavy Rail", month == "2024-05-01") |>
   summarize(total_trips = sum(UPT, na.rm = TRUE))
-nyc_subway_may2024
 ```
+
+In May 2024, 180,458,819 trips taken on the NYC Subway - Heavy Rail system, showing the significant number of ridership for a single month.
 
 ### [Question 4.]{.underline} How much did NYC subway ridership fall between April 2019 and April 2020?
 
@@ -257,8 +260,9 @@ nyc_subway_april_ridership <- USAGE |>
 
 ridership_fall <- nyc_subway_april_ridership |> # % fall 
   summarize(fall = 100* (total_trips[month == "2020-04-01"] - total_trips[month == "2019-04-01"]) / total_trips[month == "2019-04-01"])
-ridership_fall
 ```
+
+NYC Subway ridership went **down by 91.3%** during the early months of pandemic.
 
 ## More interesting transit facts
 
@@ -272,8 +276,9 @@ most_trip_single_month <- USAGE |>
   summarize(total_trips = sum(UPT,na.rm = TRUE), .groups = "drop") |>
   arrange(desc(total_trips)) |>
   slice(1)
-most_trip_single_month
 ```
+
+The **MTA New York City Transit** had the highest number of **322,725,962** trips in a single month.
 
 ### 2. Which mode of transit had the highest trip length in 2024?
 
@@ -286,8 +291,9 @@ longest_avg_trip_2024 <-USAGE |>
   summarize(avg_trip_length = sum(VRM, na.rm = TRUE) / sum(UPT, na.rm = TRUE)) |>
   arrange(desc(avg_trip_length)) |>
   slice(1)
-longest_avg_trip_2024
 ```
+
+The **Demand Response** was the longest average trip of **12.8 miles** in 2024.
 
 ### 3. Which transit agency had the largest vehicle fleet(VRM) in 2024? 
 
@@ -300,18 +306,20 @@ largest_fleet_2024 <- USAGE |>
   summarize(total_VRM = sum(VRM, na.rm = TRUE)) |>
   arrange(desc(total_VRM)) |>
   slice(1)
-largest_fleet_2024
 ```
+
+The **MTA New York City Transit** had the largest vehicle fleet of **273,222,702 VRM**.
 
 ## Part 3. Table Summarization
 
-This code is responsible for creating an annual summary of public transit usage and financial data for 2022 - `USAGE_2022_ANNUAL`, steps
+This code is responsible for creating an annual summary of public transit usage and financial data for 2022 - `USAGE_2022_ANNUAL`.\
+Here are the steps:
 
 1\) Filtering and summarizing transit data for 2022.
 
 2\) Updating Financial data mode labels.
 
-3\) Join the `USAGE_AND_FINANCIALS` and making sure that modes aren't abbreviated.
+3\) Joining the `USAGE_AND_FINANCIALS` and making sure that modes aren't abbreviated.
 
 ```{r, echo=TRUE}
 #Task 5 table summarization
@@ -427,8 +435,9 @@ lowest_expenses_per_vrm <-USAGE_AND_FINANCIALS |>
   mutate(expenses_per_vrm = Expenses / VRM) |>
   arrange(expenses_per_vrm) |>
   slice(1)
-lowest_expenses_per_vrm
 ```
+
+**Result**: **Metropolitan Transit (Vanpool, San Francisco)** has the lowest expenses per VRM with **\$0.53** per mile.
 
 ### 6. Which transit system (agency and mode) has the highest total fares per VRM?
 
@@ -444,6 +453,48 @@ highest_fares_per_vrm
 ```
 
 **Result**: **Jacksonville Transportation Authority's Ferry** **service** generates **\$157.71 per VTM**. Meaning, ferry service in that location, has significantly higher fares compared to bus or rail, due to specific travel needs.\
+
+## Summary
+
++-----------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| Questions                                                                                                                         | Short Answer                                     |
++===================================================================================================================================+==================================================+
+| What transit agency had the most total VRM in our data set?                                                                       | The MTA New York City Transit 10,832,855,350 VRM |
++-----------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| What transit mode had the most total VRM in our data set?                                                                         | Bus \                                            |
+|                                                                                                                                   | 49,444,494,088 VRM                               |
++-----------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| How many trips were taken on the NYC Subway (Heavy Rail) in May 2024?                                                             | 180,458,819 trips                                |
++-----------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| How much did NYC subway ridership fall between April 2019 and April 2020?                                                         | -91.3%                                           |
++-----------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| Which transit agency had the most trips in a single month?                                                                        | MTA New York City Transit 322,725,962 trips      |
++-----------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| Which mode of transit had the highest trip length in 2024?                                                                        | Demand Response \                                |
+|                                                                                                                                   | 12.8 miles                                       |
++-----------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| Which transit agency had the largest vehicle fleet(VRM) in 2024?                                                                  | MTA New York City Transit\                       |
+|                                                                                                                                   | 273,222,702 VRM                                  |
++-----------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| Which transit system (agency and mode) had the most UPT in 2022?                                                                  | MTA New York City Transit - Heavy Rail\          |
+|                                                                                                                                   | 1.79 billion UPT                                 |
++-----------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| Which transit system (agency and mode) had the highest farebox recovery, defined as the highest ratio of Total Fares to Expenses? | Port Imperial Ferry (New York-New Jersey area) \ |
+|                                                                                                                                   | 66.3% farebox recovery ratio                     |
++-----------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| Which transit system (agency and mode) has the lowest expenses per UPT?                                                           | North Carolina Department of Transportation\     |
+|                                                                                                                                   | Bus, around \$0                                  |
++-----------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| Which transit system (agency and mode) has the highest total fares per UPT?                                                       | Hampton Jitney(Commuter Bus) 41.29 per UPT       |
++-----------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| Which transit system (agency and mode) has the lowest expenses per VRM?                                                           | Metropolitan Transit (Vanpool, San Francisco) \  |
+|                                                                                                                                   | \$0.53 per mile                                  |
++-----------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+| Which transit system (agency and mode) has the highest total fares per VRM?                                                       | Jacksonville Transportation Authority\           |
+|                                                                                                                                   | Ferry, \$157.71 per VTM.                         |
++-----------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------+
+
+: Q&A Fiscal Characteristics of Major US Public Transit Systems
 
 \
 This mini-project provides valuable insights into the operational, financial efficiency and sustainability of various U.S. transit systems; and gives a great glimpse into the data how well certain transit agencies manage the cost efficiency and revenue generation from fares.

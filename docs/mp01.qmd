@@ -449,7 +449,6 @@ highest_fares_per_vrm <- USAGE_AND_FINANCIALS |>
   mutate(fares_per_vrm = `Total Fares` / VRM) |>
   arrange(desc(fares_per_vrm)) |>
   slice(1)
-highest_fares_per_vrm
 ```
 
 **Result**: **Jacksonville Transportation Authority's Ferry** **service** generates **\$157.71 per VTM**. Meaning, ferry service in that location, has significantly higher fares compared to bus or rail, due to specific travel needs.
@@ -496,5 +495,6 @@ highest_fares_per_vrm
 
 : Q&A Fiscal Characteristics of Major US Public Transit Systems
 
-\
-This mini-project provides valuable insights into the operational, financial efficiency and sustainability of various U.S. transit systems; and gives a great glimpse into the data how well certain transit agencies manage the cost efficiency and revenue generation from fares.
+The **most efficient transit system** depends on whether the focus is on revenue generation, operational costs, or the balance of both.
+
+From a cost-efficiency perspective, the **Port Imperial Ferry** stands out for farebox recovery, while **Metropolitan Vanpool** and **North Carolina Transit (Bus)** are operationally efficient in terms of expenses. However, if revenue generation per trips or miles is prioritized, **Hampton Jitney** and **Jacksonville Ferry** are the best.

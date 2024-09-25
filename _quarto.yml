@@ -13,7 +13,7 @@ website:
     search: false
     right:
       - text: "Mini-project 1"
-        href: "STA9750-2024-FALL/mp01.html"
+        href: "./STA9750-2024-FALL/mp01.html"
 format:
   html:
     theme: litera

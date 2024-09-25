@@ -262,7 +262,7 @@ ridership_fall
 
 ## More interesting transit facts
 
-### [1.]{.underline} Which transit agency had the most trips in a single month?
+### 1. Which transit agency had the most trips in a single month?
 
 Let's find out the transit agency with the most trips in a single month by grouping the data by agency and month, summing the total trips, sorting in descending order and getting the top result.
 
@@ -275,7 +275,7 @@ most_trip_single_month <- USAGE |>
 most_trip_single_month
 ```
 
-### [2.]{.underline} Which mode of transit had the highest trip length in 2024?
+### 2. Which mode of transit had the highest trip length in 2024?
 
 This code filters `2024` by using `grepl` function for `month` column. Then, groups `Mode` and calculates the average trip length by diving totals of VRM and UPT.
 
@@ -289,7 +289,7 @@ longest_avg_trip_2024 <-USAGE |>
 longest_avg_trip_2024
 ```
 
-### [3.]{.underline} Which transit agency had the largest vehicle fleet(VRM) in 2024? 
+### 3. Which transit agency had the largest vehicle fleet(VRM) in 2024? 
 
 This code provides the agency with the most distance(VRM) with its fleet in 2024.
 

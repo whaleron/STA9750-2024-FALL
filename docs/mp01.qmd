@@ -452,7 +452,7 @@ highest_fares_per_vrm <- USAGE_AND_FINANCIALS |>
 highest_fares_per_vrm
 ```
 
-**Result**: **Jacksonville Transportation Authority's Ferry** **service** generates **\$157.71 per VTM**. Meaning, ferry service in that location, has significantly higher fares compared to bus or rail, due to specific travel needs.\
+**Result**: **Jacksonville Transportation Authority's Ferry** **service** generates **\$157.71 per VTM**. Meaning, ferry service in that location, has significantly higher fares compared to bus or rail, due to specific travel needs.
 
 ## Summary
 

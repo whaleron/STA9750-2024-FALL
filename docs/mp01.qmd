@@ -334,7 +334,6 @@ USAGE_2022_ANNUAL <- USAGE |>
     VRM = sum(VRM, na.rm = TRUE),
     .groups = "drop"
   )
-USAGE_2022_ANNUAL
 
 FINANCIALS_mode_updated <- FINANCIALS %>%
   mutate(Mode =case_when(
@@ -358,8 +357,6 @@ FINANCIALS_mode_updated <- FINANCIALS %>%
     Mode == "YR" ~ "Hybrid Rail",
     TRUE ~ "Unknown"
   ))
-FINANCIALS_mode_updated
-
 USAGE_AND_FINANCIALS <- left_join(USAGE_2022_ANNUAL, 
                                   FINANCIALS_mode_updated, 
                                   join_by(`NTD ID`, Mode)) |>
@@ -377,7 +374,6 @@ most_upt_2022 <- USAGE_AND_FINANCIALS |>
   filter(UPT >= 400000) |>
   arrange(desc(UPT)) |>
   slice(1)
-most_upt_2022
 ```
 
 **Result:** It's no surprise that **MTA New York City Transit - Heavy Rail** leads with **1.79 billion** UPT. The immense number of people rely on it every day, both New Yorkers and tourists.
@@ -392,7 +388,6 @@ highest_farebox_recovery <- USAGE_AND_FINANCIALS |>
   mutate(farebox_recovery = `Total Fares` / Expenses) |>
   arrange(desc(farebox_recovery)) |>
   slice(1)
-highest_farebox_recovery
 ```
 
 **Result: Port Imperial Ferry (New York-New Jersey area)** is on the top of the chart with **66.3% farebox recovery ratio**. This higher ratio means that it's less reliant on subsidies from local or federal governments.
@@ -407,7 +402,6 @@ lower_expenses_per_upt <- USAGE_AND_FINANCIALS |>
   mutate(expenses_per_upt = Expenses / UPT) |>
   arrange(expenses_per_upt) |>
   slice(1)
-lower_expenses_per_upt
 ```
 
 **Result**: The **North Carolina Department of Transportation's Bus system** in **Raleigh** leads this chart with the lowest expenses per trip.
@@ -422,7 +416,6 @@ highest_fares_per_upt <- USAGE_AND_FINANCIALS |>
   mutate(fares_per_upt = `Total Fares` / UPT) |>
   arrange(desc(fares_per_upt)) |>
   slice(1)
-highest_fares_per_upt
 ```
 
 **Result**: **Hampton Jitney(Commuter Bus)** in the **New York City** are had the highest total **\$41.29 per UPT** and is the combination of long-distance and premium services for people who want to spend the vacation in Hamptons.

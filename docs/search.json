@@ -81,7 +81,7 @@
     "href": "mp02.html",
     "title": "Mini-Project #02: The Business of Show Business",
     "section": "",
-    "text": "In this project, we will analyze the Hollywood history and get data-driven ideas for a “new movie” by defining best genres, actors, directors of a decade, all the time and assign special weighted score that will help us to identify the secret of a successful sauce to make the catchy and appealing movie for the nowadays audience. Let’s begin!\nThe key data source that will be used is the Internet Movie Database (IMDb) for non-commercial use."
+    "text": "In this project, we will analyze the Hollywood history and get data-driven ideas for a “new movie” by defining best genres, actors, directors of a decade, all the time and assign special weighted score that will help us to identify the secret of a successful sauce to make the catchy and appealing movie for the nowadays audience. Let’s begin!\nThe key data source that will be used is the Internet Movie Database (IMDb) for non-commercial use.\nNote: All answers are provided from a large IMDb dataset that I run locally. However the code in this Quarto file uses compressed data from here. So some charts might be influenced and you can see differneces (e.g. you will notice that moving chart data for 2020 a bit corrupt)."
   },
   {
     "objectID": "mp02.html#before-we-start",

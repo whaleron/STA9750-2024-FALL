@@ -5,3 +5,8 @@
 
 /.quarto/
 title.principals.tsv.gz
+*.tsv
+*.tsv.gz
+mp02_cache/
+*.zip
+.RDataTmp

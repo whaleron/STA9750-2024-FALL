@@ -4827,39 +4827,29 @@ vertical-align: -.125em;
 <div class="cell">
 <details class="code-fold">
 <summary>Import IMDb Data</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get_imdb_file &lt;- function(fname){</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     BASE_URL &lt;- &quot;https://datasets.imdbws.com/&quot;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#     fname_ext &lt;- paste0(fname, &quot;.tsv.gz&quot;)</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#     if(!file.exists(fname_ext)){</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#         FILE_URL &lt;- paste0(BASE_URL, fname_ext)</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#         download.file(FILE_URL, </span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#                       destfile = fname_ext)</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#     }</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#     as.data.frame(readr::read_tsv(fname_ext, lazy=FALSE))</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># }</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>get_imdb_file <span class="ot">&lt;-</span> <span class="cf">function</span>(filename) {</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  base_url <span class="ot">&lt;-</span> <span class="st">&quot;https://raw.githubusercontent.com/michaelweylandt/STA9750/main/miniprojects/mini02_preprocessed/&quot;</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  file_url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(base_url, filename, <span class="st">&quot;.csv.zip&quot;</span>)</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  dest_file <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;data/&quot;</span>, filename, <span class="st">&quot;.csv.zip&quot;</span>)</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;data&quot;</span>)) {</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">&quot;data&quot;</span>)</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(dest_file)) {</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">download.file</span>(file_url, <span class="at">destfile =</span> dest_file, <span class="at">mode =</span> <span class="st">&quot;wb&quot;</span>)</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(dest_file)</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(data)</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>NAME_BASICS      <span class="ot">&lt;-</span> <span class="fu">get_imdb_file</span>(<span class="st">&quot;name_basics_small&quot;</span>)</span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS     <span class="ot">&lt;-</span> <span class="fu">get_imdb_file</span>(<span class="st">&quot;title_basics_small&quot;</span>)</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>TITLE_EPISODES   <span class="ot">&lt;-</span> <span class="fu">get_imdb_file</span>(<span class="st">&quot;title_episodes_small&quot;</span>)</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>TITLE_RATINGS    <span class="ot">&lt;-</span> <span class="fu">get_imdb_file</span>(<span class="st">&quot;title_ratings_small&quot;</span>)</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>TITLE_CREW       <span class="ot">&lt;-</span> <span class="fu">get_imdb_file</span>(<span class="st">&quot;title_crew_small&quot;</span>)</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>TITLE_PRINCIPALS <span class="ot">&lt;-</span> <span class="fu">get_imdb_file</span>(<span class="st">&quot;title_principals_small&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>get_imdb_file <span class="ot">&lt;-</span> <span class="cf">function</span>(filename) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  base_url <span class="ot">&lt;-</span> <span class="st">&quot;https://raw.githubusercontent.com/michaelweylandt/STA9750/main/miniprojects/mini02_preprocessed/&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  file_url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(base_url, filename, <span class="st">&quot;.csv.zip&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  dest_file <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;data/&quot;</span>, filename, <span class="st">&quot;.csv.zip&quot;</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;data&quot;</span>)) {</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">&quot;data&quot;</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(dest_file)) {</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">download.file</span>(file_url, <span class="at">destfile =</span> dest_file, <span class="at">mode =</span> <span class="st">&quot;wb&quot;</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(dest_file)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(data)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>NAME_BASICS      <span class="ot">&lt;-</span> <span class="fu">get_imdb_file</span>(<span class="st">&quot;name_basics_small&quot;</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS     <span class="ot">&lt;-</span> <span class="fu">get_imdb_file</span>(<span class="st">&quot;title_basics_small&quot;</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>TITLE_EPISODES   <span class="ot">&lt;-</span> <span class="fu">get_imdb_file</span>(<span class="st">&quot;title_episodes_small&quot;</span>)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>TITLE_RATINGS    <span class="ot">&lt;-</span> <span class="fu">get_imdb_file</span>(<span class="st">&quot;title_ratings_small&quot;</span>)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>TITLE_CREW       <span class="ot">&lt;-</span> <span class="fu">get_imdb_file</span>(<span class="st">&quot;title_crew_small&quot;</span>)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>TITLE_PRINCIPALS <span class="ot">&lt;-</span> <span class="fu">get_imdb_file</span>(<span class="st">&quot;title_principals_small&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>After this step we will start our EDA(explanatory data analysis)</p>

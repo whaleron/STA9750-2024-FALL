@@ -42,16 +42,6 @@ It might take some time to download it and several times I caught myself on thou
 #| warning: false
 #| cache: true
 
-# get_imdb_file <- function(fname){
-#     BASE_URL <- "https://datasets.imdbws.com/"
-#     fname_ext <- paste0(fname, ".tsv.gz")
-#     if(!file.exists(fname_ext)){
-#         FILE_URL <- paste0(BASE_URL, fname_ext)
-#         download.file(FILE_URL, 
-#                       destfile = fname_ext)
-#     }
-#     as.data.frame(readr::read_tsv(fname_ext, lazy=FALSE))
-# }
 get_imdb_file <- function(filename) {
   base_url <- "https://raw.githubusercontent.com/michaelweylandt/STA9750/main/miniprojects/mini02_preprocessed/"
   

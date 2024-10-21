@@ -1,6 +1,9 @@
 ---
 title: "Mini-Project #02: The Business of Show Business"
 editor: visual
+execute:
+  enabled: false
+  cache: true
 ---
 
 In this project, we will analyze the Hollywood history and get data-driven ideas for a "new movie" by defining best genres, actors, directors of a decade, all the time and assign special weighted score that will help us to identify the secret of a successful sauce to make the catchy and appealing movie for the nowadays audience. Let's begin!
@@ -36,6 +39,7 @@ It might take some time to download it and several times I caught myself on thou
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
 #| code-summary: "Import IMDb Data"
+#| cache: true
 
 get_imdb_file <- function(fname){
     BASE_URL <- "https://datasets.imdbws.com/"
@@ -67,6 +71,7 @@ We will sample our data to smaller chunks for this analysis and will use "knownF
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
 #| code-summary: "Data Sub-Sampling"
+#| cache: true
 
 NAME_BASICS <- NAME_BASICS |> 
     filter(str_count(knownForTitles, ",") > 1)
@@ -120,6 +125,7 @@ In this step, we will correct the column types of the `TITLE` tables using a com
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
 #| code-summary: "NAME_BASICS Example"
+#| cache: true
 NAME_BASICS <- NAME_BASICS |>
     mutate(birthYear = as.numeric(birthYear),
            deathYear = as.numeric(deathYear))
@@ -130,6 +136,8 @@ Before we will change all types it's useful to check what is your data with `gli
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
 #| code-summary: "Glimpse Example"
+#| cache: true
+
 glimpse(NAME_BASICS)
 glimpse(TITLE_BASICS)
 glimpse(TITLE_EPISODES)
@@ -143,6 +151,8 @@ Another good function is `separate_longer_delim` that helps to break view into m
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
 #| code-summary: "Separate_longer_delim function"
+#| cache: true
+
 NAME_BASICS |> separate_longer_delim(knownForTitles, ",") |> slice_head(n=10)
 ```
 
@@ -153,6 +163,8 @@ Here's a small schema that shows all connections between the tables.
 #### Task 1. Correct all TITLE tables
 
 ```{r, echo=TRUE, message=FALSE}
+#| cache: true
+
 TITLE_BASICS <- TITLE_BASICS |>
     mutate(startYear = as.numeric(startYear),
            endYear = as.numeric(endYear),

@@ -1,14 +1,13 @@
 ---
 title: "Mini-Project #02: The Business of Show Business"
 editor: visual
-execute:
-  enabled: false
-  cache: true
 ---
 
 In this project, we will analyze the Hollywood history and get data-driven ideas for a "new movie" by defining best genres, actors, directors of a decade, all the time and assign special weighted score that will help us to identify the secret of a successful sauce to make the catchy and appealing movie for the nowadays audience. Let's begin!
 
 The key data source that will be used is the [Internet Movie Database (IMDb) for non-commercial use](https://datasets.imdbws.com/).
+
+[Note]{.underline}: *All answers are provided from a large IMDb dataset that I run locally. However the code in this Quarto file uses compressed data from [here](https://github.com/michaelweylandt/STA9750/tree/main/miniprojects/mini02_preprocessed/). So some charts might be influenced and you can see differneces (e.g. you will notice that moving chart data for 2020 a bit corrupt).*
 
 ## Before we start
 
@@ -39,25 +38,43 @@ It might take some time to download it and several times I caught myself on thou
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
 #| code-summary: "Import IMDb Data"
+#| message: false 
+#| warning: false
 #| cache: true
 
-get_imdb_file <- function(fname){
-    BASE_URL <- "https://datasets.imdbws.com/"
-    fname_ext <- paste0(fname, ".tsv.gz")
-    if(!file.exists(fname_ext)){
-        FILE_URL <- paste0(BASE_URL, fname_ext)
-        download.file(FILE_URL, 
-                      destfile = fname_ext)
-    }
-    as.data.frame(readr::read_tsv(fname_ext, lazy=FALSE))
+# get_imdb_file <- function(fname){
+#     BASE_URL <- "https://datasets.imdbws.com/"
+#     fname_ext <- paste0(fname, ".tsv.gz")
+#     if(!file.exists(fname_ext)){
+#         FILE_URL <- paste0(BASE_URL, fname_ext)
+#         download.file(FILE_URL, 
+#                       destfile = fname_ext)
+#     }
+#     as.data.frame(readr::read_tsv(fname_ext, lazy=FALSE))
+# }
+get_imdb_file <- function(filename) {
+  base_url <- "https://raw.githubusercontent.com/michaelweylandt/STA9750/main/miniprojects/mini02_preprocessed/"
+  
+  file_url <- paste0(base_url, filename, ".csv.zip")
+  dest_file <- paste0("data/", filename, ".csv.zip")
+  
+  if (!dir.exists("data")) {
+    dir.create("data")
+  }
+  
+  if (!file.exists(dest_file)) {
+    download.file(file_url, destfile = dest_file, mode = "wb")
+  }
+  data <- readr::read_csv(dest_file)
+  return(data)
 }
 
-NAME_BASICS      <- get_imdb_file("name.basics")
-TITLE_BASICS     <- get_imdb_file("title.basics")
-TITLE_EPISODES   <- get_imdb_file("title.episode")
-TITLE_RATINGS    <- get_imdb_file("title.ratings")
-TITLE_CREW       <- get_imdb_file("title.crew")
-TITLE_PRINCIPALS <- get_imdb_file("title.principals")
+NAME_BASICS      <- get_imdb_file("name_basics_small")
+TITLE_BASICS     <- get_imdb_file("title_basics_small")
+TITLE_EPISODES   <- get_imdb_file("title_episodes_small")
+TITLE_RATINGS    <- get_imdb_file("title_ratings_small")
+TITLE_CREW       <- get_imdb_file("title_crew_small")
+TITLE_PRINCIPALS <- get_imdb_file("title_principals_small")
 ```
 
 After this step we will start our EDA(explanatory data analysis)
@@ -125,6 +142,8 @@ In this step, we will correct the column types of the `TITLE` tables using a com
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
 #| code-summary: "NAME_BASICS Example"
+#| message: false 
+#| warning: false
 #| cache: true
 NAME_BASICS <- NAME_BASICS |>
     mutate(birthYear = as.numeric(birthYear),
@@ -137,13 +156,13 @@ Before we will change all types it's useful to check what is your data with `gli
 #| code-fold: true
 #| code-summary: "Glimpse Example"
 #| cache: true
-
-glimpse(NAME_BASICS)
-glimpse(TITLE_BASICS)
-glimpse(TITLE_EPISODES)
-glimpse(TITLE_RATINGS)
-glimpse(TITLE_CREW)
-glimpse(TITLE_PRINCIPLES)
+#| warning: false
+# glimpse(NAME_BASICS)
+# glimpse(TITLE_BASICS)
+# glimpse(TITLE_EPISODES)
+# glimpse(TITLE_RATINGS)
+# glimpse(TITLE_CREW)
+# glimpse(TITLE_PRINCIPALS)
 ```
 
 Another good function is `separate_longer_delim` that helps to break view into multiple rows, here's the example:
@@ -153,7 +172,7 @@ Another good function is `separate_longer_delim` that helps to break view into m
 #| code-summary: "Separate_longer_delim function"
 #| cache: true
 
-NAME_BASICS |> separate_longer_delim(knownForTitles, ",") |> slice_head(n=10)
+# NAME_BASICS |> separate_longer_delim(knownForTitles, ",") |> slice_head(n=10)
 ```
 
 Here's a small schema that shows all connections between the tables.
@@ -164,6 +183,7 @@ Here's a small schema that shows all connections between the tables.
 
 ```{r, echo=TRUE, message=FALSE}
 #| cache: true
+#| warning: false
 
 TITLE_BASICS <- TITLE_BASICS |>
     mutate(startYear = as.numeric(startYear),
@@ -200,6 +220,8 @@ After we wrangled and cleaned our dataset we can proceed to simple data manipula
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
+#| warning: false
+#| include-output: false
 #| code-summary: "Question 1 Code"
 TITLE_BASICS |>
   group_by(titleType) |>
@@ -212,12 +234,13 @@ Answer: **Traudl Lessing** was born in 1625.
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
+#| warning: false
+#| include-output: false
 #| code-summary: "Question 2 Code"
 oldest_person <- NAME_BASICS |>
   filter(is.na(deathYear)) |>
   filter(birthYear == min(birthYear, na.rm = TRUE)) |>
   select(primaryName,birthYear)
-print(oldest_person)
 ```
 
 #### 3) There is one TV Episode in this data set with a perfect 10/10 rating and 200,000 IMDb ratings. What is it? What series does it belong to?
@@ -226,12 +249,12 @@ Answer: **Ozymandias**
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
+#| include-output: false
 #| code-summary: "Question 3 Code"
 best_episode <- TITLE_RATINGS |>
   filter(averageRating == 10, numVotes >= 200000) |>
   inner_join(TITLE_BASICS, by = "tconst") |>
   select(primaryTitle, titleType)
-print(best_episode)
 ```
 
 #### 4) What four projects is the actor Mark Hamill most known for?
@@ -245,14 +268,13 @@ Answer:
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
+#| include-output: false
 #| code-summary: "Question 4 Code"
 hamill_titles <- NAME_BASICS |>
   filter(primaryName == "Mark Hamill") |>
   separate_rows(knownForTitles, sep = ",") |>
   inner_join(TITLE_BASICS, by = c("knownForTitles" = "tconst")) |>
   select (primaryTitle)
-print(hamill_titles)
-print(best_episode)
 ```
 
 #### 5) What TV series, with more than 12 episodes, has the highest average rating?
@@ -261,6 +283,7 @@ Answer: **Breaking Bad** with the average rating 9.5.
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
+#| include-output: false
 #| code-summary: "Question 5 Code"
 top_series <- TITLE_EPISODES |>
   count(parentTconst) |>
@@ -270,7 +293,6 @@ top_series <- TITLE_EPISODES |>
   top_n(1) |>
   inner_join(TITLE_BASICS, by = c("parentTconst" ="tconst")) |>
   select(primaryTitle, averageRating)
-print(top_series)
 ```
 
 #### 6) Is it true that episodes from later seasons of Happy Days have lower average ratings than the early seasons?
@@ -279,6 +301,7 @@ Answer: It's **not true**, all episodes from later seasons have **7.4 rating.**
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
+#| include-output: false
 #| code-summary: "Question 6 Code"
 happy_days <- TITLE_BASICS |>
   filter(primaryTitle == "Happy Days") |>
@@ -287,7 +310,6 @@ happy_days <- TITLE_BASICS |>
   group_by(seasonNumber) |>
   summarise(avg_rating = mean(averageRating, na.rm = TRUE)) |>
   arrange (seasonNumber)
-print(happy_days)
 ```
 
 #### Task 3. Custom Success Metric
@@ -330,13 +352,13 @@ Answer:
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
+#| include-output: false
 #| code-summary: "Question 1 Code"
 top_movies <- TITLE_RATINGS |>
   arrange(desc(weighted_popularity_score)) |>
   head(10) |>
   inner_join(TITLE_BASICS, by = "tconst") |>
   select(primaryTitle, weighted_popularity_score, averageRating, numVotes)
-print(top_movies)
 ```
 
 #### 2) Choose 3-5 movies with large numbers of IMDb votes that score poorly on your success metric and confirm that they are indeed of low quality.
@@ -353,6 +375,7 @@ Answer:
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
+#| include-output: false
 #| code-summary: "Question 2 Code"
 low_movies <- TITLE_RATINGS |>
   filter(numVotes >quantile(TITLE_RATINGS$numVotes, 0.9)) |>
@@ -360,7 +383,6 @@ low_movies <- TITLE_RATINGS |>
   head(5) |>
   inner_join (TITLE_BASICS, by = "tconst") |>
   select(primaryTitle, weighted_popularity_score, averageRating, numVotes)
-print(low_movies)
 ```
 
 Conclusion for 1 & 2, the `weighted_popularity_score` (WPS) valid compared with the data and show proper calculation to both highest or lowest amount of votes with scores.
@@ -381,13 +403,13 @@ Answer:
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
+#| include-output: false
 #| code-summary: "Question 3 Code"
 
 #finding cillian murphy id in the dataset
 cillian_murphy <- NAME_BASICS |>
   filter(primaryName == "Cillian Murphy") |>
   select(nconst, primaryName)
-print(cillian_murphy)
 
 successful_actor <- TITLE_PRINCIPALS |>
   filter(nconst == "nm0614165") |>
@@ -395,7 +417,6 @@ successful_actor <- TITLE_PRINCIPALS |>
   arrange(desc(weighted_popularity_score)) |>
   inner_join(TITLE_BASICS, by = "tconst") |>
   select(primaryTitle, weighted_popularity_score, averageRating, numVotes)
-print(successful_actor)
 ```
 
 #### 4) Perform at least one other form of ‘spot check’ validation.
@@ -406,6 +427,7 @@ Min: 4.62 Max: 138.8
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
+#| include-output: false
 #| code-summary: "Question 4 Code"
 TITLE_RATINGS <- TITLE_RATINGS |>
   mutate(weighted_popularity_score = averageRating * log(numVotes + 1))
@@ -428,12 +450,12 @@ The 90th percentile corresponds to a 59.87, so we will set a threshold value not
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
+#| include-output: false
 #| code-summary: "Question 5 - Code"
 quantiles <- quantile(TITLE_RATINGS$weighted_popularity_score, probs = seq(0, 1, 0.1), na.rm = TRUE)
 print(quantiles)
 
 success_threshold <- 59
-
 ```
 
 #### Task 4. Trends in Success Over Time
@@ -442,6 +464,7 @@ Alright, now we can check data more with a threshold set to find successful plot
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
+#| include-output: false
 #| code-summary: "Task 4 - Data Prep"
 TITLE_RATINGS <- TITLE_RATINGS |>
   mutate(weighted_popularity_score = averageRating * log(numVotes + 1))
@@ -501,18 +524,19 @@ Spoiler: People love **Drama!**
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
+#| include-output: false
 #| code-summary: "Question 1 - Code"
 top_genres_per_decade <- genre_decade_successes |>
   group_by(decade) |>
   top_n(1, wt = success_count) |>
   arrange(decade)
-print(top_genres_per_decade)
 ```
 
 Plotting over time with new `gganimate` knowledge.
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
+#| include-output: false
 #| code-summary: "Question 1 - Moving plot"
 if (!require(gganimate)) install.packages("gganimate")
 if (!require(gifski)) install.packages("gifski")
@@ -546,23 +570,25 @@ top_genres_overall <- genre_decade_successes |>
 plot_data <- genre_decade_successes |>
   filter(genres %in% top_genres_overall)
 
-# Create the animated plot
-animation <- ggplot(plot_data, aes(x = reorder(genres, success_count), y = success_count, fill = genres)) +
-  geom_bar(stat = "identity") +
-  coord_flip() +
-  labs(title = "Number of Successful Movies by Genre in {closest_state}",
-       x = "Genre",
-       y = "Number of Successful Movies") +
-  theme_minimal() +
-  theme(legend.position = "none",
-        plot.title = element_text(size = 16, face = "bold")) +
-  transition_states(decade, transition_length = 2, state_length = 1) +
-  ease_aes('cubic-in-out')
-
-# Render
-animate(animation, renderer = gifski_renderer(), width = 800, height = 600)
-anim_save("genre_successes.gif", animation = last_animation())
+# Collapsed animated plot as it breaks during rendering, works locally well!
+# animation <- ggplot(plot_data, aes(x = reorder(genres, success_count), y = success_count, fill = genres)) +
+#   geom_bar(stat = "identity") +
+#   coord_flip() +
+#   labs(title = "Number of Successful Movies by Genre in {closest_state}",
+#        x = "Genre",
+#        y = "Number of Successful Movies") +
+#   theme_minimal() +
+#   theme(legend.position = "none",
+#         plot.title = element_text(size = 16, face = "bold")) +
+#   transition_states(decade, transition_length = 2, state_length = 1) +
+#   ease_aes('cubic-in-out')
+# 
+# # Render
+# animate(animation, renderer = gifski_renderer(), width = 800, height = 600)
+# anim_save("genre_successes.gif", animation = last_animation())
 ```
+
+![Genre Successes Animation](genre_successes.gif)
 
 #### 2) What genre consistently has the most “successes”? What genre used to reliably produced “successes” and has fallen out of favor?
 
@@ -588,6 +614,7 @@ Answer:
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
+#| include-output: false
 #| code-summary: "Question 2 - Code"
 genre_decade_presence <- genre_decade_successes |>
   group_by(genres) |>
@@ -600,24 +627,21 @@ total_successes_per_genre <- genre_decade_successes |>
 genre_consistency <- genre_decade_presence |>
   inner_join(total_successes_per_genre, by = "genres") |>
   arrange(desc(decades_with_success), desc(total_successes))
-
-print(n = 15, genre_consistency)
 ```
 
 #### 3) What genre has produced the most “successes” since 2010? Does it have the highest success rate or does it only have a large number of successes because there are many productions in that genre?
 
-Answer:
-
 **What genre has produced the most "successes" since 2010?**
 
-Answer: Drama has produced the most "successes" since 2010, with 3,421 successful movies.
+Answer: **Drama** has produced the most "successes" since 2010, with **3,421** successful movies.
 
 **Does it have the highest success rate or does it only have a large number of successes because there are many productions in that genre?**
 
-Answer: Drama does not have the highest success rate. Its large number of successes is primarily due to the high number of productions in that genre. The success rate for Drama is 12.0%, which is lower than genres like Biography (22.4%) and Adventure (20.3%).
+Answer: Drama does not have the highest success rate. Its large number of successes is primarily due to the high number of productions in that genre. The success rate for Drama is **12%**, which is lower than genres like Biography **22.4%** and Adventure **20.3%**.
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
+#| include-output: false
 #| code-summary: "Question 3 - Code"
 movies_since_2010 <- movies_data |>
   filter(startYear >= 2010)
@@ -635,14 +659,13 @@ genre_success_rate_since_2010 <- successes_since_2010 |>
   inner_join(total_since_2010, by = "genres") |>
   mutate(success_rate = success_count / total_count) |>
   arrange(desc(success_count))
-
-print(genre_success_rate_since_2010)
 ```
 
 Here's a plot:
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
+#| warning: false
 #| code-summary: "Question 3 - Code"
 library(ggplot2)
 library(scales)
@@ -699,6 +722,7 @@ Let's prapare the data to get at least 2 best actors and 1 director.
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
+#| include-output: false
 #| code-summary: "Task 5 - Code"
 TITLE_RATINGS <- TITLE_RATINGS |>
   mutate(weighted_popularity_score = averageRating * log(numVotes + 1))
@@ -746,6 +770,7 @@ We will concentrate on two genres Action and War to get our top actors and direc
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
+#| include-output: false
 #| code-summary: "Task 5 - Code"
 # Calculate average success metric for directors
 director_success <- director_data |>
@@ -780,8 +805,7 @@ actor_success_genre <- actors_in_genres |>
 top_actors <- actor_success_genre |>
   arrange(desc(average_success)) |>
   head(5)
-
-print(top_actors)
+# print(top_actors)
 
 #TOP DIRECTOR 
 # Filter director movies in preferred genres
@@ -802,7 +826,7 @@ director_success_genre <- directors_in_genres |>
 top_directors <- director_success_genre |>
   arrange(desc(average_success)) |>
   head(3)
-print(top_directors)
+# print(top_directors)
 ```
 
 Answer:
@@ -826,6 +850,8 @@ Answer:
 | Bob Persichetti   | 113             | 1            |
 
 : Top Directors
+
+I've combined directors and actors successes scores and highlighted selected ones.
 
 ```{r, echo=TRUE, message=FALSE}
 #| code-fold: true
@@ -879,7 +905,7 @@ Christopher Nolan, renowned for his visionary storytelling in films like "Incept
 
 With this exceptional team, we aim to create a cinematic masterpiece that honors the original while captivating modern audiences. Securing the rights from Columbia Pictures will allow us to proceed, and with your approval, we can begin this exciting journey.
 
-![](images/Beige Brown Clean Desolate Desert Photo Album Cover.jpg)
+![](images/Beige%20Brown%20Clean%20Desolate%20Desert%20Photo%20Album%20Cover.jpg)
 
 **Classic 90's Style Teaser:**
 

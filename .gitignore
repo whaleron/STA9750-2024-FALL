@@ -4,6 +4,7 @@
 .Ruserdata
 
 /.quarto/
+<<<<<<< HEAD
 .Rproj.user
 */*_cache/*
 *tsv*
@@ -14,3 +15,11 @@
 .Rhistory
 mp02_cache/
 mp03_cache/
+=======
+title.principals.tsv.gz
+*.tsv
+*.tsv.gz
+mp02_cache/
+*.zip
+.RDataTmp
+>>>>>>> db5dd7cbee5f36d537da720fa4e7eb2d3ac3ec82

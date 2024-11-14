@@ -247,9 +247,15 @@ best_episode <- TITLE_RATINGS |>
   select(primaryTitle, titleType)
 ```
 
+<<<<<<< HEAD
 #### 4) git count-objects -vHWhat four projects is the actor Mark Hamill most known for?
 
 git Answer:
+=======
+#### 4) What four projects is the actor Mark Hamill most known for?
+
+Answer:
+>>>>>>> db5dd7cbee5f36d537da720fa4e7eb2d3ac3ec82
 
 **1. Star Wars: Episode IV - A New Hope\
 2. Star Wars: Episode VIII - The Last Jedi\
@@ -328,7 +334,11 @@ TITLE_RATINGS <- TITLE_RATINGS |>
 Answer:
 
 | Primary Title                                         | WPS      | Average Rating | Number of Votes |
+<<<<<<< HEAD
 |-------------------------------------------------------|----------|----------------|-----------------|
+=======
+|-------------------|------------------|------------------|------------------|
+>>>>>>> db5dd7cbee5f36d537da720fa4e7eb2d3ac3ec82
 | 1\. Breaking Bad                                      | 138.8069 | 9.5            | 2216074         |
 | 2\. The Shawshank Redemption                          | 138.5429 | 9.3            | 2949309         |
 | 3\. Game of Thrones                                   | 134.9721 | 9.2            | 2352239         |

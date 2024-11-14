@@ -1,0 +1,52 @@
+# R a
+# Ignore R project-specific files
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# Quarto cache and related files
+/.quarto/
+*/*_cache/*
+
+# Ignore specific file types across the project
+*.rdb
+*.zip
+*.csv
+*.tsv
+*.xlsx
+*.DS_Store
+
+# Ignore shapefile directory and specific shapefiles
+data/shapefiles/
+data/census_shapefiles/
+docs/1976-2020-president.csv
+docs/1976-2022-house.csv
+
+# Project-specific cache directories
+mp02_cache/
+mp03_cache/
+nd Quarto files
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# Quarto cache and project files
+/.quarto/
+.Rproj.user
+*/*_cache/*
+
+# Specific file types
+*.tsv
+*.csv
+*.xlsx
+*.zip
+*.rdb
+# macOS system files
+.DS_Store
+
+# Project-specific cache directories
+mp02_cache/
+mp03_cache/
+

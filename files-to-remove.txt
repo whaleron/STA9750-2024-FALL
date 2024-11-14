@@ -1,0 +1,9 @@
+title.principals.tsv.gz
+name.basics.tsv.gz
+title.basics.tsv.gz
+mp02_cache/
+data/name_basics_small.csv.zip
+title.crew.tsv.gz
+data/title_principals_small.csv.zip
+title.episode.tsv.gz
+.RDataTmp

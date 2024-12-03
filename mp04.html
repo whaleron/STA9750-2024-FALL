@@ -1,0 +1,2851 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="quarto-1.5.57" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+
+
+<title>Mini-Project #04: Monte Carlo-Informed Selection of CUNY Retirement Plans – STA 9750 2024 Submission Material</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<!-- htmldependencies:E3FAD763 -->
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="/index.html">
+    <span class="navbar-title">STA 9750 2024 Submission Material</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+  aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation"
+  onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="/./mp01.html"> 
+<span class="menu-text">Mini-project 1</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div id="quarto-toc-target"></div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" ></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Mini-Project #04: Monte Carlo-Informed Selection of CUNY Retirement Plans</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Outline</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#data-sources---alphavantage-fred" id="toc-data-sources---alphavantage-fred"><span class="header-section-number">2</span> Data Sources - AlphaVantage &amp; FRED</a></li>
+  <li><a href="#data-acquisition" id="toc-data-acquisition"><span class="header-section-number">3</span> Data Acquisition</a></li>
+  <li><a href="#detailed-analysis-of-correlations" id="toc-detailed-analysis-of-correlations"><span class="header-section-number">4</span> Detailed Analysis of Correlations</a></li>
+  <li><a href="#summary-statistics-explanation" id="toc-summary-statistics-explanation"><span class="header-section-number">5</span> Summary Statistics Explanation</a></li>
+  <li><a href="#long-term-monthly-averages-analysis" id="toc-long-term-monthly-averages-analysis"><span class="header-section-number">6</span> Long-Term Monthly Averages Analysis</a></li>
+  <li><a href="#analysis-of-historical-trends-of-economic-indicators" id="toc-analysis-of-historical-trends-of-economic-indicators"><span class="header-section-number">7</span> Analysis of Historical Trends of Economic Indicators</a></li>
+  <li><a href="#historical-comparison-of-trs-and-orp" id="toc-historical-comparison-of-trs-and-orp"><span class="header-section-number">8</span> Historical Comparison of TRS and ORP</a></li>
+  <li><a href="#fixed-rate-analysis" id="toc-fixed-rate-analysis"><span class="header-section-number">9</span> Fixed-Rate Analysis</a></li>
+  <li><a href="#bootstrap-monte-carlo-comparison" id="toc-bootstrap-monte-carlo-comparison"><span class="header-section-number">10</span> Bootstrap (Monte Carlo) Comparison</a></li>
+  </ul>
+</nav>
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1"><span class="header-section-number">1</span> Introduction</h2>
+<p>Choosing a retirement plan is a critical decision for new CUNY faculty, who must select between the <strong>Teachers Retirement System (TRS)</strong> and the <strong>Optional Retirement Plan (ORP)</strong> within 30 days. The TRS is a defined-benefit plan that provides predictable lifetime income based on salary and years of service, with contributions and inflation adjustments structured to ensure steady growth. In contrast, the ORP is a defined-contribution plan, where savings depend on market performance, offering more flexibility but shifting the investment risk to employees.</p>
+<p>This research uses financial modeling in R to evaluate the long-term outcomes of these plans. By simulating market returns, inflation adjustments, and compound interest, we aim to estimate which plan is likely to provide greater financial benefits. This project highlights the power of data-driven analysis in making informed financial decisions.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Import Libraries</summary>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fuzzyjoin)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble) <span class="co">#rownames_to_column bug</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DT)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span></code></pre></div>
+</details>
+</div>
+</section>
+<section id="data-sources---alphavantage-fred" class="level2" data-number="2">
+<h2 data-number="2"><span class="header-section-number">2</span> Data Sources - AlphaVantage &amp; FRED</h2>
+<p>For this project, we will use data from two economic and financial data sources:</p>
+<ul>
+<li><p><a href="https://www.alphavantage.co/">AlphaVantage</a>: a commercial stock market data provider</p></li>
+<li><p><a href="https://fred.stlouisfed.org/">FRED</a>: the Federal Reserve Economic Data repository maintained by the Federal Reserve Bank of St. Louis</p></li>
+</ul>
+<p>From AlphaVantage, we are extracting <strong>adjusted close prices</strong> for selected financial instruments (e.g., U.S. equities – SPY, international equities, and bonds). This data helps analyze trends, calculate returns, and measure compounding growth.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Extracting Data From AlphaVantage (Task 1)</summary>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>alpha_key <span class="ot">&lt;-</span> <span class="fu">readLines</span>(<span class="st">&quot;AlphaKey.txt&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a function to fetch data from Alpha Vantage</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>get_alpha_data <span class="ot">&lt;-</span> <span class="cf">function</span>(symbol, <span class="at">interval =</span> <span class="st">&quot;TIME_SERIES_DAILY&quot;</span>, api_key) {</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;https://www.alphavantage.co/query?function=&quot;</span>, interval,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;&amp;symbol=&quot;</span>, symbol, <span class="st">&quot;&amp;apikey=&quot;</span>, api_key, <span class="st">&quot;&amp;outputsize=full&amp;datatype=json&quot;</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Send request and check response</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  response <span class="ot">&lt;-</span> <span class="fu">request</span>(url) <span class="sc">%&gt;%</span> <span class="fu">req_perform</span>()</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (response <span class="sc">%&gt;%</span> <span class="fu">resp_status</span>() <span class="sc">!=</span> <span class="dv">200</span>) {</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">&quot;Failed to retrieve Alpha Vantage data. HTTP Status: &quot;</span>, response <span class="sc">%&gt;%</span> <span class="fu">resp_status</span>())</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(response <span class="sc">%&gt;%</span> <span class="fu">resp_body_string</span>())</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  timeseries <span class="ot">&lt;-</span> data[[<span class="st">&quot;Time Series (Daily)&quot;</span>]]</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(timeseries)) <span class="fu">stop</span>(<span class="st">&quot;Failed to retrieve Alpha Vantage data for symbol: &quot;</span>, symbol)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">do.call</span>(rbind, timeseries))</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">rownames</span>(df)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(df) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Data cleaning and processing</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">close =</span> <span class="st">`</span><span class="at">4. close</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">date =</span> <span class="fu">as.Date</span>(date),</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">close =</span> <span class="fu">as.numeric</span>(close)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(date)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">month =</span> <span class="fu">format</span>(date, <span class="st">&quot;%Y-%m&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(month) <span class="sc">%&gt;%</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>      <span class="at">monthly_return =</span> <span class="fu">last</span>(close) <span class="sc">/</span> <span class="fu">first</span>(close) <span class="sc">-</span> <span class="dv">1</span>,</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>      <span class="at">.groups =</span> <span class="st">&#39;drop&#39;</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as.Date</span>(<span class="fu">paste0</span>(month, <span class="st">&quot;-01&quot;</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(date, monthly_return)</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(df)</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</details>
+</div>
+<p>From FRED, we are extracting economic indicators such as inflation (CPI), wage growth, and short-term treasury yields. These metrics are vital for modeling economic trends and understanding how they relate to investments.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Extracting Data From FRED (Task 2)</summary>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fred_key <span class="ot">&lt;-</span> <span class="fu">readLines</span>(<span class="st">&quot;FredKey.txt&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a function to fetch data from FRED</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>get_fred_data <span class="ot">&lt;-</span> <span class="cf">function</span>(series_id, api_key) {</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;https://api.stlouisfed.org/fred/series/observations?series_id=&quot;</span>, </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                series_id, <span class="st">&quot;&amp;api_key=&quot;</span>, api_key, <span class="st">&quot;&amp;file_type=json&quot;</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Send request and check response</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  response <span class="ot">&lt;-</span> <span class="fu">request</span>(url) <span class="sc">%&gt;%</span> <span class="fu">req_perform</span>()</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (response <span class="sc">%&gt;%</span> <span class="fu">resp_status</span>() <span class="sc">!=</span> <span class="dv">200</span>) {</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">&quot;Failed to retrieve FRED data. HTTP Status: &quot;</span>, response <span class="sc">%&gt;%</span> <span class="fu">resp_status</span>())</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Parse JSON response</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(response <span class="sc">%&gt;%</span> <span class="fu">resp_body_string</span>())</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(data<span class="sc">$</span>observations)) <span class="fu">stop</span>(<span class="st">&quot;No observations found for series: &quot;</span>, series_id)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to data frame</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(data<span class="sc">$</span>observations) <span class="sc">%&gt;%</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">date =</span> <span class="fu">as.Date</span>(date),</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">value =</span> <span class="fu">suppressWarnings</span>(<span class="fu">as.numeric</span>(value))</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(value)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(date, value)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(df)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</details>
+</div>
+</section>
+<section id="data-acquisition" class="level2" data-number="3">
+<h2 data-number="3"><span class="header-section-number">3</span> Data Acquisition</h2>
+<p>For our Monte Carlo analysis, we need a comprehensive dataset covering historical trends in wage growth, inflation, and market returns across different asset classes. Specifically, we will extract:</p>
+<ol type="1">
+<li><p><strong>Wage Growth</strong>: Historical wage growth rates from FRED, using the series <code>CES0500000003</code> (Average Hourly Earnings Growth).</p></li>
+<li><p><strong>Inflation</strong>: Historical inflation data from FRED, using the series <code>CPIAUCSL</code> (Consumer Price Index for All Urban Consumers).</p></li>
+<li><p><strong>U.S. Stock Market Returns</strong>: Adjusted close prices for the SPY ETF (a proxy for U.S. equities) from AlphaVantage.</p></li>
+<li><p><strong>International Stock Market Returns</strong>: Adjusted close prices for the ACWI ETF (a proxy for international equities) from AlphaVantage.</p></li>
+<li><p><strong>Bond Market Returns</strong>: Historical yields for 10-Year Treasury Bonds from FRED, using the series <code>GS10</code>.</p></li>
+<li><p><strong>Short-Term Debt Returns</strong>: Historical yields for 2-Year Treasury Bonds from FRED, using the series <code>DGS2</code>.</p></li>
+</ol>
+<div class="cell">
+<details class="code-fold">
+<summary>Task 3: Fetching Wage Growth Data</summary>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>wage_growth_data <span class="ot">&lt;-</span> <span class="fu">get_fred_data</span>(<span class="st">&quot;CES0500000003&quot;</span>, fred_key) <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month =</span> <span class="fu">format</span>(date, <span class="st">&quot;%Y-%m&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">wage_growth_rate =</span> <span class="fu">last</span>(value), <span class="at">.groups =</span> <span class="st">&#39;drop&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as.Date</span>(<span class="fu">paste0</span>(month, <span class="st">&quot;-01&quot;</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(date, wage_growth_rate)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>inflation_data <span class="ot">&lt;-</span> <span class="fu">get_fred_data</span>(<span class="st">&quot;CPIAUCSL&quot;</span>, fred_key) <span class="sc">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month =</span> <span class="fu">format</span>(date, <span class="st">&quot;%Y-%m&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month) <span class="sc">%&gt;%</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">inflation_rate =</span> <span class="fu">last</span>(value), <span class="at">.groups =</span> <span class="st">&#39;drop&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as.Date</span>(<span class="fu">paste0</span>(month, <span class="st">&quot;-01&quot;</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(date, inflation_rate)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>us_equity_data <span class="ot">&lt;-</span> <span class="fu">get_alpha_data</span>(<span class="st">&quot;SPY&quot;</span>, <span class="st">&quot;TIME_SERIES_DAILY&quot;</span>, alpha_key) <span class="sc">%&gt;%</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">us_equity_return =</span> monthly_return)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>intl_equity_data <span class="ot">&lt;-</span> <span class="fu">get_alpha_data</span>(<span class="st">&quot;ACWI&quot;</span>, <span class="st">&quot;TIME_SERIES_DAILY&quot;</span>, alpha_key) <span class="sc">%&gt;%</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">intl_equity_return =</span> monthly_return)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>bond_data <span class="ot">&lt;-</span> <span class="fu">get_fred_data</span>(<span class="st">&quot;GS10&quot;</span>, fred_key) <span class="sc">%&gt;%</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month =</span> <span class="fu">format</span>(date, <span class="st">&quot;%Y-%m&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month) <span class="sc">%&gt;%</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">bond_return =</span> <span class="fu">last</span>(value), <span class="at">.groups =</span> <span class="st">&#39;drop&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as.Date</span>(<span class="fu">paste0</span>(month, <span class="st">&quot;-01&quot;</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(date, bond_return)</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>short_term_debt_data <span class="ot">&lt;-</span> <span class="fu">get_fred_data</span>(<span class="st">&quot;DGS2&quot;</span>, fred_key) <span class="sc">%&gt;%</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month =</span> <span class="fu">format</span>(date, <span class="st">&quot;%Y-%m&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month) <span class="sc">%&gt;%</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">short_term_rate =</span> <span class="fu">last</span>(value), <span class="at">.groups =</span> <span class="st">&#39;drop&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as.Date</span>(<span class="fu">paste0</span>(month, <span class="st">&quot;-01&quot;</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(date, short_term_rate)</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>all_data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>  wage_growth_data,</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>  inflation_data,</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>  us_equity_data,</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>  intl_equity_data,</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>  bond_data,</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>  short_term_debt_data</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reduce</span>(full_join, <span class="at">by =</span> <span class="st">&quot;date&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(date) <span class="sc">%&gt;%</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()  </span></code></pre></div>
+</details>
+</div>
+</section>
+<section id="detailed-analysis-of-correlations" class="level2" data-number="4">
+<h2 data-number="4"><span class="header-section-number">4</span> Detailed Analysis of Correlations</h2>
+<section id="wage-growth-rate-and-inflation-rate-correlation-0.99" class="level4" data-number="4.0.1">
+<h4 data-number="4.0.1"><span class="header-section-number">4.0.1</span> <strong>1. Wage Growth Rate and Inflation Rate (Correlation: 0.99)</strong></h4>
+<p>Wage growth and inflation are almost perfectly correlated, with a coefficient of <strong>0.99</strong>. This strong relationship suggests that as inflation rises, wages tend to adjust upward to maintain purchasing power. However, the lag effect between inflation increases and wage adjustments may still impact real income, as wage growth may not immediately match inflation in real-time. This high correlation also reflects how labor markets react to price-level changes in the economy.</p>
+</section>
+<section id="u.s.-stock-market-and-international-stock-market-returns-correlation-0.97" class="level4" data-number="4.0.2">
+<h4 data-number="4.0.2"><span class="header-section-number">4.0.2</span> <strong>2. U.S. Stock Market and International Stock Market Returns (Correlation: 0.97)</strong></h4>
+<p>The correlation between U.S. equity returns (SPY) and international equity returns (ACWI) is <strong>0.97</strong>, indicating that these markets tend to move together. Global economic factors, such as monetary policies, geopolitical events, or trade relationships, likely drive this interdependence.</p>
+</section>
+<section id="bond-returns-vs.-short-term-debt-returns-correlation-0.71" class="level4" data-number="4.0.3">
+<h4 data-number="4.0.3"><span class="header-section-number">4.0.3</span> <strong>3. Bond Returns vs. Short-Term Debt Returns (Correlation: 0.71)</strong></h4>
+<p>A moderately strong correlation of <strong>0.71</strong> between bond returns (10-year Treasury yields) and short-term debt returns (2-year Treasury yields) reflects the influence of the yield curve. Both long-term and short-term rates are sensitive to interest rate changes, but they respond differently to economic conditions.</p>
+</section>
+<section id="inflation-rate-vs.-short-term-debt-returns-correlation-0.74" class="level4" data-number="4.0.4">
+<h4 data-number="4.0.4"><span class="header-section-number">4.0.4</span> <strong>4. Inflation Rate vs. Short-Term Debt Returns (Correlation: 0.74)</strong></h4>
+<p>The correlation between inflation and short-term debt returns is <strong>0.74</strong>, reflecting that short-term interest rates rise in response to inflationary pressures. Central banks typically increase interest rates to control inflation, which directly impacts short-term debt yields.</p>
+</section>
+<section id="stock-market-vs.-other-economic-indicators" class="level4" data-number="4.0.5">
+<h4 data-number="4.0.5"><span class="header-section-number">4.0.5</span> <strong>5. Stock Market vs. Other Economic Indicators</strong></h4>
+<ul>
+<li><p>The correlation between wage growth and U.S. equity returns is <strong>0.07</strong>, and with international equity returns, it is <strong>0.05</strong>.</p></li>
+<li><p>The correlation between inflation and U.S. equity returns is <strong>0.05</strong>, and with international equity returns, it is <strong>0.03</strong>.</p></li>
+<li><p>Short-term rates are negatively correlated with U.S. equity returns (<strong>−0.04</strong>) and international equity returns (<strong>−0.03</strong>).</p></li>
+<li><p>Bond returns are weakly negatively correlated with U.S. equity returns (<strong>−0.09</strong>) and international equity returns (<strong>−0.08</strong>).</p></li>
+</ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Task 4: Initial Data Analysis - Correlation Matrix</summary>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>correlation_matrix <span class="ot">&lt;-</span> all_data <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>date) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>(<span class="at">use =</span> <span class="st">&quot;complete.obs&quot;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>correlation_data <span class="ot">&lt;-</span> correlation_matrix <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="st">&quot;Variable1&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>Variable1, <span class="at">names_to =</span> <span class="st">&quot;Variable2&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;Correlation&quot;</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(correlation_data, <span class="fu">aes</span>(<span class="at">x =</span> Variable1, <span class="at">y =</span> Variable2, <span class="at">fill =</span> Correlation)) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">mid =</span> <span class="st">&quot;white&quot;</span>, <span class="at">high =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">midpoint =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Correlation Heatmap&quot;</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Indicator 1&quot;</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Indicator 2&quot;</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Correlation&quot;</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img src="mp04_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672" /></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="summary-statistics-explanation" class="level2" data-number="5">
+<h2 data-number="5"><span class="header-section-number">5</span> Summary Statistics Explanation</h2>
+<ol type="1">
+<li><p><strong>Wage Growth</strong>: Average hourly wage is $26.69, with moderate variability (variance: $15.78, Standard Deviation (SD): $3.97). This reflects stable long-term growth.</p></li>
+<li><p><strong>Inflation</strong>: Average CPI is $249.21, with high variability (variance: $833.04, SD: $28.86), indicating significant fluctuations and economic uncertainty.</p></li>
+<li><p><strong>U.S. Equity Returns</strong>: Slightly positive average monthly return ($0.01) with low volatility (SD: $0.05), reflecting consistent performance.</p></li>
+<li><p><strong>International Equity Returns</strong>: Neutral monthly returns ($0.00) and low volatility (SD: $0.05), similar to U.S. equities, indicating stable international markets.</p></li>
+<li><p><strong>Bond Returns</strong>: Steady average yield of $2.58, with low variability (variance: $0.85, SD: $0.92), highlighting bonds as a stable long-term investment.</p></li>
+<li><p><strong>Short-Term Debt Returns</strong>: Average yield of $1.44, but higher variability (variance: $1.99, SD: $1.41), showing greater sensitivity to interest rate changes.</p></li>
+</ol>
+<p>Inflation demonstrates the highest variability, underscoring its economic impact. Equities have low volatility with consistent returns, while short-term debt shows greater instability compared to bonds, reflecting sensitivity to policy changes.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Task 4: Initial Analysis - Summary Statistics</summary>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>summary_stats <span class="ot">&lt;-</span> all_data <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>date) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize_all</span>(<span class="fu">list</span>(<span class="at">mean =</span> mean, <span class="at">var =</span> var, <span class="at">sd =</span> sd), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">&quot;Variable_Stat&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;Value&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variable =</span> <span class="fu">str_extract</span>(Variable_Stat, <span class="st">&quot;^[^_]+&quot;</span>),</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">Stat =</span> <span class="fu">str_extract</span>(Variable_Stat, <span class="st">&quot;[^_]+$&quot;</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Variable_Stat) <span class="sc">%&gt;%</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">&quot;Stat&quot;</span>, <span class="at">values_from =</span> <span class="st">&quot;Value&quot;</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>summary_stats_table <span class="ot">&lt;-</span> summary_stats <span class="sc">%&gt;%</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Summary Statistics&quot;</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Mean, Variance, and Standard Deviation of Variables&quot;</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(mean, var, sd),</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">2</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variable =</span> <span class="st">&quot;Variable&quot;</span>,</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="st">&quot;Mean&quot;</span>,</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">var =</span> <span class="st">&quot;Variance&quot;</span>,</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd =</span> <span class="st">&quot;Standard Deviation&quot;</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">table.width =</span> <span class="fu">px</span>(<span class="dv">700</span>),</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">column_labels.font.weight =</span> <span class="st">&quot;bold&quot;</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>summary_stats_table</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="ibybmqfafp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ibybmqfafp table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#ibybmqfafp thead, #ibybmqfafp tbody, #ibybmqfafp tfoot, #ibybmqfafp tr, #ibybmqfafp td, #ibybmqfafp th {
+  border-style: none;
+}
+
+#ibybmqfafp p {
+  margin: 0;
+  padding: 0;
+}
+
+#ibybmqfafp .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 700px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#ibybmqfafp .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#ibybmqfafp .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ibybmqfafp .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ibybmqfafp .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ibybmqfafp .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ibybmqfafp .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ibybmqfafp .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ibybmqfafp .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ibybmqfafp .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ibybmqfafp .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ibybmqfafp .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ibybmqfafp .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#ibybmqfafp .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#ibybmqfafp .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ibybmqfafp .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ibybmqfafp .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ibybmqfafp .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ibybmqfafp .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ibybmqfafp .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#ibybmqfafp .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#ibybmqfafp .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#ibybmqfafp .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ibybmqfafp .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#ibybmqfafp .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#ibybmqfafp .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ibybmqfafp .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ibybmqfafp .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#ibybmqfafp .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ibybmqfafp .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#ibybmqfafp .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ibybmqfafp .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ibybmqfafp .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ibybmqfafp .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ibybmqfafp .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ibybmqfafp .gt_left {
+  text-align: left;
+}
+
+#ibybmqfafp .gt_center {
+  text-align: center;
+}
+
+#ibybmqfafp .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ibybmqfafp .gt_font_normal {
+  font-weight: normal;
+}
+
+#ibybmqfafp .gt_font_bold {
+  font-weight: bold;
+}
+
+#ibybmqfafp .gt_font_italic {
+  font-style: italic;
+}
+
+#ibybmqfafp .gt_super {
+  font-size: 65%;
+}
+
+#ibybmqfafp .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#ibybmqfafp .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#ibybmqfafp .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#ibybmqfafp .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#ibybmqfafp .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#ibybmqfafp .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#ibybmqfafp .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#ibybmqfafp .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#ibybmqfafp div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_heading">
+<th colspan="4" class="gt_heading gt_title gt_font_normal">Summary Statistics</th>
+</tr>
+<tr class="odd gt_heading">
+<th colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Mean, Variance, and Standard Deviation of Variables</th>
+</tr>
+<tr class="header gt_col_headings">
+<th id="Variable" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Variable</th>
+<th id="mean" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Mean</th>
+<th id="var" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Variance</th>
+<th id="sd" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Standard Deviation</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Variable">wage</td>
+<td class="gt_row gt_right" headers="mean">26.69</td>
+<td class="gt_row gt_right" headers="var">15.78</td>
+<td class="gt_row gt_right" headers="sd">3.97</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Variable">inflation</td>
+<td class="gt_row gt_right" headers="mean">249.21</td>
+<td class="gt_row gt_right" headers="var">833.04</td>
+<td class="gt_row gt_right" headers="sd">28.86</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Variable">us</td>
+<td class="gt_row gt_right" headers="mean">0.01</td>
+<td class="gt_row gt_right" headers="var">0.00</td>
+<td class="gt_row gt_right" headers="sd">0.05</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Variable">intl</td>
+<td class="gt_row gt_right" headers="mean">0.00</td>
+<td class="gt_row gt_right" headers="var">0.00</td>
+<td class="gt_row gt_right" headers="sd">0.05</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Variable">bond</td>
+<td class="gt_row gt_right" headers="mean">2.58</td>
+<td class="gt_row gt_right" headers="var">0.85</td>
+<td class="gt_row gt_right" headers="sd">0.92</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Variable">short</td>
+<td class="gt_row gt_right" headers="mean">1.44</td>
+<td class="gt_row gt_right" headers="var">1.99</td>
+<td class="gt_row gt_right" headers="sd">1.41</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="long-term-monthly-averages-analysis" class="level2" data-number="6">
+<h2 data-number="6"><span class="header-section-number">6</span> Long-Term Monthly Averages Analysis</h2>
+<p>This table presents the long-term monthly averages for key economic indicators, offering insights into trends that influence retirement planning:</p>
+<ol type="1">
+<li><p><strong>Wage Growth Rate</strong>: The long-term average wage growth rate is <strong>26.69</strong>, reflecting steady increases in employee earnings. This metric drives the calculation of pension benefits under TRS and impacts the accumulation of contributions for ORP.</p></li>
+<li><p><strong>Inflation Rate</strong>: The average inflation rate is <strong>249.21</strong>, influenced by the scale of the dataset (CPI levels). This directly affects cost-of-living adjustments (COLAs) for TRS, ensuring the pension keeps pace with living costs, and indirectly impacts the purchasing power of ORP withdrawals.</p></li>
+<li><p><strong>U.S. Equity Market Returns</strong>: The average monthly return for U.S. equities is <strong>0.01</strong> (1%), indicating modest but consistent growth, a critical driver of ORP investment performance.</p></li>
+<li><p><strong>International Equity Market Returns</strong>: The average monthly return for international equities is close to <strong>0.00</strong> (neutral), reflecting lower or stagnant growth over the observed period. This limits diversification benefits in ORP portfolios relying heavily on international equities.</p></li>
+<li><p><strong>Bond Returns</strong>: Bonds yield an average return of <strong>2.58</strong>, representing stability and forming a conservative component in ORP investments, particularly as employees near retirement.</p></li>
+<li><p><strong>Short-Term Debt Rates</strong>: The average short-term rate is <strong>1.44</strong>, lower than long-term bonds but still relevant for short-term liquidity management and lower-risk components in ORP portfolios.</p></li>
+</ol>
+<p>These insights illustrate how wage growth and inflation dominate as drivers of TRS benefits, while ORP relies heavily on equity and bond returns, underscoring the contrasting nature of the two plans.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Task 4: Initial Analysis - Long-term Monthly Averages</summary>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>long_term_means <span class="ot">&lt;-</span> all_data <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>date) <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize_all</span>(mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>long_term_table <span class="ot">&lt;-</span> long_term_means <span class="sc">%&gt;%</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">&quot;Variable&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;Mean&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Long-Term Monthly Averages&quot;</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Comparison across variables&quot;</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="st">&quot;Mean&quot;</span>,</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">2</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variable =</span> <span class="st">&quot;Indicator&quot;</span>,</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean =</span> <span class="st">&quot;Long-Term Average&quot;</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">table.width =</span> <span class="fu">px</span>(<span class="dv">500</span>),</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">column_labels.font.weight =</span> <span class="st">&quot;bold&quot;</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>long_term_table</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="lvfvqvldkj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#lvfvqvldkj table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#lvfvqvldkj thead, #lvfvqvldkj tbody, #lvfvqvldkj tfoot, #lvfvqvldkj tr, #lvfvqvldkj td, #lvfvqvldkj th {
+  border-style: none;
+}
+
+#lvfvqvldkj p {
+  margin: 0;
+  padding: 0;
+}
+
+#lvfvqvldkj .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 500px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#lvfvqvldkj .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#lvfvqvldkj .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#lvfvqvldkj .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#lvfvqvldkj .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#lvfvqvldkj .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lvfvqvldkj .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#lvfvqvldkj .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#lvfvqvldkj .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#lvfvqvldkj .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#lvfvqvldkj .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#lvfvqvldkj .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#lvfvqvldkj .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#lvfvqvldkj .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#lvfvqvldkj .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#lvfvqvldkj .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#lvfvqvldkj .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#lvfvqvldkj .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#lvfvqvldkj .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lvfvqvldkj .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#lvfvqvldkj .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#lvfvqvldkj .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#lvfvqvldkj .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lvfvqvldkj .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#lvfvqvldkj .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#lvfvqvldkj .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lvfvqvldkj .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lvfvqvldkj .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#lvfvqvldkj .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lvfvqvldkj .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#lvfvqvldkj .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lvfvqvldkj .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#lvfvqvldkj .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lvfvqvldkj .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#lvfvqvldkj .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lvfvqvldkj .gt_left {
+  text-align: left;
+}
+
+#lvfvqvldkj .gt_center {
+  text-align: center;
+}
+
+#lvfvqvldkj .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#lvfvqvldkj .gt_font_normal {
+  font-weight: normal;
+}
+
+#lvfvqvldkj .gt_font_bold {
+  font-weight: bold;
+}
+
+#lvfvqvldkj .gt_font_italic {
+  font-style: italic;
+}
+
+#lvfvqvldkj .gt_super {
+  font-size: 65%;
+}
+
+#lvfvqvldkj .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#lvfvqvldkj .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#lvfvqvldkj .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#lvfvqvldkj .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#lvfvqvldkj .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#lvfvqvldkj .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#lvfvqvldkj .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#lvfvqvldkj .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#lvfvqvldkj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_heading">
+<th colspan="2" class="gt_heading gt_title gt_font_normal">Long-Term Monthly Averages</th>
+</tr>
+<tr class="odd gt_heading">
+<th colspan="2" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Comparison across variables</th>
+</tr>
+<tr class="header gt_col_headings">
+<th id="Variable" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Indicator</th>
+<th id="Mean" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Long-Term Average</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Variable">wage_growth_rate</td>
+<td class="gt_row gt_right" headers="Mean">26.69</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Variable">inflation_rate</td>
+<td class="gt_row gt_right" headers="Mean">249.21</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Variable">us_equity_return</td>
+<td class="gt_row gt_right" headers="Mean">0.01</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Variable">intl_equity_return</td>
+<td class="gt_row gt_right" headers="Mean">0.00</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Variable">bond_return</td>
+<td class="gt_row gt_right" headers="Mean">2.58</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Variable">short_term_rate</td>
+<td class="gt_row gt_right" headers="Mean">1.44</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="analysis-of-historical-trends-of-economic-indicators" class="level2" data-number="7">
+<h2 data-number="7"><span class="header-section-number">7</span> Analysis of Historical Trends of Economic Indicators</h2>
+<p>This plot compares the historical trends of key economic indicators: inflation rate, U.S. equity returns, and international equity returns, over time:</p>
+<p><strong>Inflation Rate:</strong> The red line shows a consistent upward trend, representing the cumulative growth in consumer prices over time. This aligns with long-term inflationary pressures that increase the cost of living. The high scale reflects the cumulative nature of inflation as indexed by the CPI, which serves as a key factor in calculating cost-of-living adjustments (COLAs) for TRS.</p>
+<p><strong>U.S. Equities and International Equities:</strong> The blue and green lines (U.S. and international equities, respectively) remain near zero, reflecting monthly percentage changes in equity returns rather than cumulative values.</p>
+<p>U.S. equities show slightly higher variability and growth compared to international equities, indicating stronger performance and higher risk-return potential in the U.S. markets.</p>
+<p>This visualization highlights the cumulative impact of inflation versus the relative variability of equity returns. While inflation steadily erodes purchasing power, equity returns, though variable, are key drivers for ORP portfolio growth, underscoring the importance of investment performance in retirement planning.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Exploratory Plots for Trends</summary>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(all_data, <span class="fu">aes</span>(<span class="at">x =</span> date)) <span class="sc">+</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> inflation_rate, <span class="at">color =</span> <span class="st">&quot;Inflation&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> us_equity_return, <span class="at">color =</span> <span class="st">&quot;U.S. Equities&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> intl_equity_return, <span class="at">color =</span> <span class="st">&quot;International Equities&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Historical Trends of Economic Indicators&quot;</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Date&quot;</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Value&quot;</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;Indicator&quot;</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img src="mp04_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672" /></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="historical-comparison-of-trs-and-orp" class="level2" data-number="8">
+<h2 data-number="8"><span class="header-section-number">8</span> Historical Comparison of TRS and ORP</h2>
+<p>The analysis evaluates retirement benefits for CUNY employees under the <strong>Teachers Retirement System (TRS)</strong> and the <strong>Optional Retirement Plan (ORP)</strong>. Key assumptions include a <strong>starting salary of $50,000</strong>, a <strong>30-year service period</strong>, and historical data on <strong>wage growth</strong>, <strong>inflation</strong>, and <strong>market returns</strong>. The TRS plan calculates pensions based on the <strong>final average salary (FAS)</strong> using tiered formulas for ≤20, exactly 20, and &gt;20 years of service. The ORP plan uses employee and employer contributions (6% and 8–10%, respectively) invested in a mix of equities and bonds, with returns adjusted for historical market data. A 4% annual withdrawal rate is assumed for ORP retirement income.</p>
+<section id="results" class="level3" data-number="8.1">
+<h3 data-number="8.1"><span class="header-section-number">8.1</span> Results:</h3>
+<ul>
+<li><p>Monthly retirement income for TRS: <strong>$ 2557.31</strong></p></li>
+<li><p>Monthly withdrawal rate for ORP based on accumulated funds: <strong>$ 2463.79</strong></p></li>
+</ul>
+<p>After 30 years of service, the <strong>TRS plan</strong> provides a predictable monthly pension of <strong>$2,557.31</strong>, while the <strong>ORP plan</strong> generates income based on market performance, yielding higher variability but greater potential for wealth accumulation. TRS is advantageous for employees prioritizing stability and guaranteed lifetime income, whereas ORP offers flexibility and market-linked growth but carries higher risk. This comparison highlights the trade-off between <strong>security (TRS)</strong> and <strong>market-driven growth (ORP)</strong>, enabling employees to make informed retirement decisions based on their financial goals and risk tolerance.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Task 5: Historical Comparison of TPS vs ORP</summary>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assumptions</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>starting_salary <span class="ot">&lt;-</span> <span class="dv">50000</span>  <span class="co"># Starting annual salary</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>working_years <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">difftime</span>(<span class="fu">max</span>(all_data<span class="sc">$</span>date), <span class="fu">min</span>(all_data<span class="sc">$</span>date), <span class="at">units =</span> <span class="st">&quot;days&quot;</span>) <span class="sc">/</span> <span class="fl">365.25</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to calculate TRS monthly pension</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>calculate_trs <span class="ot">&lt;-</span> <span class="cf">function</span>(starting_salary, wage_growth_data, inflation_data, years_worked) {</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  salary <span class="ot">&lt;-</span> starting_salary</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  salaries <span class="ot">&lt;-</span> <span class="fu">numeric</span>(years_worked)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>years_worked) {</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    growth_rate <span class="ot">&lt;-</span> wage_growth_data<span class="sc">$</span>wage_growth_rate[i <span class="sc">%%</span> <span class="fu">nrow</span>(wage_growth_data) <span class="sc">+</span> <span class="dv">1</span>] <span class="sc">/</span> <span class="dv">100</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    inflation_rate <span class="ot">&lt;-</span> inflation_data<span class="sc">$</span>inflation_rate[i <span class="sc">%%</span> <span class="fu">nrow</span>(inflation_data) <span class="sc">+</span> <span class="dv">1</span>] <span class="sc">/</span> <span class="dv">100</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    salary <span class="ot">&lt;-</span> salary <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">+</span> growth_rate <span class="sc">+</span> inflation_rate)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    salaries[i] <span class="ot">&lt;-</span> salary</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate Final Average Salary (FAS) based on the last 3 years</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  final_average_salary <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">tail</span>(salaries, <span class="dv">3</span>))</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># TRS Pension Calculation</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (years_worked <span class="sc">&lt;=</span> <span class="dv">20</span>) {</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    annual_pension <span class="ot">&lt;-</span> <span class="fl">0.0167</span> <span class="sc">*</span> final_average_salary <span class="sc">*</span> years_worked</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (years_worked <span class="sc">==</span> <span class="dv">20</span>) {</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    annual_pension <span class="ot">&lt;-</span> <span class="fl">0.0175</span> <span class="sc">*</span> final_average_salary <span class="sc">*</span> years_worked</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    annual_pension <span class="ot">&lt;-</span> (<span class="fl">0.35</span> <span class="sc">+</span> <span class="fl">0.02</span> <span class="sc">*</span> (years_worked <span class="sc">-</span> <span class="dv">20</span>)) <span class="sc">*</span> final_average_salary</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert annual pension to monthly pension</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>  monthly_pension <span class="ot">&lt;-</span> annual_pension <span class="sc">/</span> <span class="dv">12</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(monthly_pension)</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to calculate ORP monthly income</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>calculate_orp <span class="ot">&lt;-</span> <span class="cf">function</span>(starting_salary, wage_growth_data, equity_data, bond_data, years_worked, <span class="at">employer_contribution_rate =</span> <span class="fl">0.08</span>, <span class="at">withdrawal_rate =</span> <span class="fl">0.04</span>) {</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>  salary <span class="ot">&lt;-</span> starting_salary</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>  account_balance <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>years_worked) {</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>    growth_rate <span class="ot">&lt;-</span> wage_growth_data<span class="sc">$</span>wage_growth_rate[i <span class="sc">%%</span> <span class="fu">nrow</span>(wage_growth_data) <span class="sc">+</span> <span class="dv">1</span>] <span class="sc">/</span> <span class="dv">100</span></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>    equity_return <span class="ot">&lt;-</span> equity_data<span class="sc">$</span>us_equity_return[i <span class="sc">%%</span> <span class="fu">nrow</span>(equity_data) <span class="sc">+</span> <span class="dv">1</span>]</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>    bond_return <span class="ot">&lt;-</span> bond_data<span class="sc">$</span>bond_return[i <span class="sc">%%</span> <span class="fu">nrow</span>(bond_data) <span class="sc">+</span> <span class="dv">1</span>] <span class="sc">/</span> <span class="dv">100</span></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>    market_return <span class="ot">&lt;-</span> <span class="fl">0.6</span> <span class="sc">*</span> equity_return <span class="sc">+</span> <span class="fl">0.4</span> <span class="sc">*</span> bond_return  <span class="co"># Weighted portfolio return</span></span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>    salary <span class="ot">&lt;-</span> salary <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">+</span> growth_rate)</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>    employee_contribution <span class="ot">&lt;-</span> salary <span class="sc">*</span> <span class="fl">0.06</span>  <span class="co"># Employee contribution (6%)</span></span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>    employer_contribution <span class="ot">&lt;-</span> salary <span class="sc">*</span> employer_contribution_rate  <span class="co"># Employer contribution</span></span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>    total_contribution <span class="ot">&lt;-</span> employee_contribution <span class="sc">+</span> employer_contribution</span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Update account balance with contributions and market returns</span></span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>    account_balance <span class="ot">&lt;-</span> account_balance <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">+</span> market_return) <span class="sc">+</span> total_contribution</span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Monthly withdrawal after retirement</span></span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>  monthly_withdrawal <span class="ot">&lt;-</span> account_balance <span class="sc">*</span> withdrawal_rate <span class="sc">/</span> <span class="dv">12</span></span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(monthly_withdrawal)</span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate TRS Monthly Pension</span></span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>trs_income <span class="ot">&lt;-</span> <span class="fu">calculate_trs</span>(</span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>  <span class="at">starting_salary =</span> starting_salary,</span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>  <span class="at">wage_growth_data =</span> wage_growth_data,</span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a>  <span class="at">inflation_data =</span> inflation_data,</span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a>  <span class="at">years_worked =</span> working_years</span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>)<span class="sc">/</span><span class="dv">100</span></span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate ORP Monthly Income</span></span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>orp_income <span class="ot">&lt;-</span> <span class="fu">calculate_orp</span>(</span>
+<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>  <span class="at">starting_salary =</span> starting_salary,</span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>  <span class="at">wage_growth_data =</span> wage_growth_data,</span>
+<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a>  <span class="at">equity_data =</span> us_equity_data,</span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>  <span class="at">bond_data =</span> bond_data,</span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a>  <span class="at">years_worked =</span> working_years</span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a><span class="co"># Print Results</span></span>
+<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a><span class="co"># cat(&quot;TRS Monthly Pension: $&quot;, round(trs_income, 2), &quot;\n&quot;)</span></span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a><span class="co"># cat(&quot;ORP Monthly Income: $&quot;, round(orp_income, 2), &quot;\n&quot;)</span></span></code></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="fixed-rate-analysis" class="level2" data-number="9">
+<h2 data-number="9"><span class="header-section-number">9</span> Fixed-Rate Analysis</h2>
+<p>The analysis evaluates the long-term sustainability of retirement benefits for CUNY employees under the Teachers Retirement System (TRS) and the Optional Retirement Plan (ORP).<br />
+Key assumptions include a monthly TRS pension of $3,000, an initial ORP balance of $500,000, a fixed inflation rate of 2%, a fixed market return rate of 5% annually (compounded monthly), and a 4% annual withdrawal rate for ORP. The simulation spans a retirement period from age 65 to age 85, accounting for cost-of-living adjustments for TRS and market-driven growth or depletion for ORP.</p>
+<p><strong>Results and Insights</strong>:</p>
+<ul>
+<li><p><strong>Average Monthly TRS Income</strong>: $3,644.61 (adjusted for annual inflation).</p></li>
+<li><p><strong>Average Monthly ORP Income</strong>: $1,841.02 (based on withdrawals from accumulated funds).</p></li>
+<li><p><strong>Maximum Income Gap (TRS - ORP)</strong>: $2,361.54.</p></li>
+<li><p><strong>Minimum Income Gap (TRS - ORP)</strong>: $1,318.25.</p></li>
+<li><p><strong>Probability of ORP Depletion</strong>: 0% (indicating funds are sufficient throughout retirement).</p></li>
+</ul>
+<p>The TRS plan ensures a predictable, inflation-adjusted income throughout retirement, with a steady increase due to cost-of-living adjustments. In contrast, ORP income is subject to market returns and contributions made during the working period. Despite lower average income compared to TRS, the ORP plan avoids depletion, showcasing its capacity to sustain retirement needs under the fixed rate scenario. The significant income gap between the plans underscores the stability advantage of TRS, while ORP offers flexibility with potential for funds to pass to heirs. This analysis highlights the importance of prioritizing financial goals—stability versus market growth—when choosing between TRS and ORP.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Task 6: Fixed-Rate Analysis</summary>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assumptions</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>death_age <span class="ot">&lt;-</span> <span class="dv">85</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>retirement_age <span class="ot">&lt;-</span> <span class="dv">65</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>retirement_years <span class="ot">&lt;-</span> death_age <span class="sc">-</span> retirement_age</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>fixed_withdrawal_rate <span class="ot">&lt;-</span> <span class="fl">0.04</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>fixed_inflation_rate <span class="ot">&lt;-</span> <span class="fl">0.02</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>fixed_market_return_rate <span class="ot">&lt;-</span> <span class="fl">0.05</span> <span class="sc">/</span> <span class="dv">12</span>  <span class="co"># Monthly return</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>monthly_trs_pension <span class="ot">&lt;-</span> <span class="dv">3000</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>initial_orp_balance <span class="ot">&lt;-</span> <span class="dv">500000</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co"># TRS Simulation Function</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>simulate_trs <span class="ot">&lt;-</span> <span class="cf">function</span>(monthly_pension, retirement_years, inflation_rate) {</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  pension <span class="ot">&lt;-</span> <span class="fu">numeric</span>(retirement_years <span class="sc">*</span> <span class="dv">12</span>)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(pension)) {</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (i <span class="sc">==</span> <span class="dv">1</span>) {</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>      pension[i] <span class="ot">&lt;-</span> monthly_pension</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (i <span class="sc">%%</span> <span class="dv">12</span> <span class="sc">==</span> <span class="dv">1</span>) {  <span class="co"># Apply inflation annually</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>      pension[i] <span class="ot">&lt;-</span> pension[i <span class="sc">-</span> <span class="dv">1</span>] <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">+</span> inflation_rate)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>      pension[i] <span class="ot">&lt;-</span> pension[i <span class="sc">-</span> <span class="dv">1</span>]</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(pension)</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="co"># ORP Simulation Function</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>simulate_orp <span class="ot">&lt;-</span> <span class="cf">function</span>(account_balance, retirement_years, withdrawal_rate, market_return_rate) {</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>  withdrawal <span class="ot">&lt;-</span> <span class="fu">numeric</span>(retirement_years <span class="sc">*</span> <span class="dv">12</span>)</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>  balance <span class="ot">&lt;-</span> <span class="fu">numeric</span>(retirement_years <span class="sc">*</span> <span class="dv">12</span>)</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  balance[<span class="dv">1</span>] <span class="ot">&lt;-</span> account_balance</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(withdrawal)) {</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (i <span class="sc">&gt;</span> <span class="dv">1</span>) {</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>      balance[i] <span class="ot">&lt;-</span> balance[i <span class="sc">-</span> <span class="dv">1</span>] <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">+</span> market_return_rate)</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (balance[i] <span class="sc">&lt;=</span> <span class="dv">0</span>) {</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>      withdrawal[i] <span class="ot">&lt;-</span> <span class="dv">0</span>  <span class="co"># No withdrawal if balance is depleted</span></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>      balance[i] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>      withdrawal[i] <span class="ot">&lt;-</span> <span class="fu">min</span>(balance[i], balance[i] <span class="sc">*</span> withdrawal_rate <span class="sc">/</span> <span class="dv">12</span>)</span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>      balance[i] <span class="ot">&lt;-</span> balance[i] <span class="sc">-</span> withdrawal[i]</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">withdrawal =</span> withdrawal, <span class="at">balance =</span> balance))</span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Run Simulations</span></span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>trs_income_stream <span class="ot">&lt;-</span> <span class="fu">simulate_trs</span>(</span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">monthly_pension =</span> monthly_trs_pension,</span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">retirement_years =</span> retirement_years,</span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">inflation_rate =</span> fixed_inflation_rate</span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>orp_simulation <span class="ot">&lt;-</span> <span class="fu">simulate_orp</span>(</span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">account_balance =</span> initial_orp_balance,</span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>  <span class="at">retirement_years =</span> retirement_years,</span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">withdrawal_rate =</span> fixed_withdrawal_rate,</span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>  <span class="at">market_return_rate =</span> fixed_market_return_rate</span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>orp_income_stream <span class="ot">&lt;-</span> orp_simulation<span class="sc">$</span>withdrawal</span>
+<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>orp_balance_stream <span class="ot">&lt;-</span> orp_simulation<span class="sc">$</span>balance</span>
+<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a><span class="co"># Key Metrics</span></span>
+<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a>income_gap <span class="ot">&lt;-</span> trs_income_stream <span class="sc">-</span> orp_income_stream</span>
+<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a>average_trs_income <span class="ot">&lt;-</span> <span class="fu">mean</span>(trs_income_stream)</span>
+<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>average_orp_income <span class="ot">&lt;-</span> <span class="fu">mean</span>(orp_income_stream)</span>
+<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>max_income_gap <span class="ot">&lt;-</span> <span class="fu">max</span>(income_gap)</span>
+<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>min_income_gap <span class="ot">&lt;-</span> <span class="fu">min</span>(income_gap)</span>
+<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>orp_depletion_probability <span class="ot">&lt;-</span> <span class="fu">mean</span>(orp_income_stream <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a><span class="co"># cat(&quot;Average Monthly TRS Income: $&quot;, round(average_trs_income, 2), &quot;\n&quot;)</span></span>
+<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a><span class="co"># cat(&quot;Average Monthly ORP Income: $&quot;, round(average_orp_income, 2), &quot;\n&quot;)</span></span>
+<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a><span class="co"># cat(&quot;Maximum Income Gap: $&quot;, round(max_income_gap, 2), &quot;\n&quot;)</span></span>
+<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a><span class="co"># cat(&quot;Minimum Income Gap: $&quot;, round(min_income_gap, 2), &quot;\n&quot;)</span></span>
+<span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a><span class="co"># cat(&quot;Probability ORP is Depleted: &quot;, round(orp_depletion_probability * 100, 2), &quot;%\n&quot;)</span></span>
+<span id="cb10-77"><a href="#cb10-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualization</span></span>
+<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a>income_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a>  <span class="at">Month =</span> <span class="dv">1</span><span class="sc">:</span>(retirement_years <span class="sc">*</span> <span class="dv">12</span>),</span>
+<span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a>  <span class="at">TRS =</span> trs_income_stream,</span>
+<span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a>  <span class="at">ORP =</span> orp_income_stream</span>
+<span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(income_data, <span class="fu">aes</span>(<span class="at">x =</span> Month)) <span class="sc">+</span></span>
+<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> TRS, <span class="at">color =</span> <span class="st">&quot;TRS&quot;</span>), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> ORP, <span class="at">color =</span> <span class="st">&quot;ORP&quot;</span>), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Comparison of TRS and ORP Monthly Income&quot;</span>,</span>
+<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Months in Retirement&quot;</span>,</span>
+<span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Monthly Income ($)&quot;</span>,</span>
+<span id="cb10-93"><a href="#cb10-93" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;Plan&quot;</span></span>
+<span id="cb10-94"><a href="#cb10-94" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb10-95"><a href="#cb10-95" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb10-96"><a href="#cb10-96" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;TRS&quot;</span> <span class="ot">=</span> <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;ORP&quot;</span> <span class="ot">=</span> <span class="st">&quot;red&quot;</span>))</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img src="mp04_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672" /></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="bootstrap-monte-carlo-comparison" class="level2" data-number="10">
+<h2 data-number="10"><span class="header-section-number">10</span> Bootstrap (Monte Carlo) Comparison</h2>
+<p>For the Monte Carlo simulation, I aimed to compare the financial outcomes of two retirement plans—Teachers Retirement System (TRS) and Optional Retirement Plan (ORP)—using bootstrap sampling to account for the inherent variability in market returns and inflation. Our analysis assumes:</p>
+<p><strong>Retirement Assumptions</strong>:</p>
+<ul>
+<li><p>A 30-year retirement period.</p></li>
+<li><p>An initial ORP balance of $300,000 and a fixed monthly TRS pension of $3,000.</p></li>
+<li><p>Inflation rate of 2% per year, applied annually to TRS income.</p></li>
+</ul>
+<p><strong>Market Data</strong>: Market returns were bootstrapped from a historical distribution with a mean of 0.04 (annualized return) and a standard deviation of 0.05 (annualized volatility).</p>
+<p><strong>Withdrawal Rates</strong>: Two withdrawal rates were analyzed for ORP: 4% (standard safe withdrawal) and 7% (aggressive withdrawal).</p>
+<p><strong>Simulation</strong>: Ran 200 simulations to estimate key probabilities for ORP and TRS performance outcomes.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Task 7: Monte Carlo Analysis</summary>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Monte Carlo simulation function</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>simulate_monte_carlo <span class="ot">&lt;-</span> <span class="cf">function</span>(num_simulations, initial_balance, pension_income, </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                                 withdrawal_rates, fixed_inflation, market_returns) {</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">simulation_id =</span> <span class="fu">numeric</span>(), <span class="at">month =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                    <span class="at">pension_income =</span> <span class="fu">numeric</span>(), <span class="at">orp_withdrawal =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>                    <span class="at">orp_balance =</span> <span class="fu">numeric</span>(), <span class="at">withdrawal_rate =</span> <span class="fu">numeric</span>())</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (sim <span class="cf">in</span> <span class="fu">seq_len</span>(num_simulations)) {</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(sim)  <span class="co"># Ensure reproducibility</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    sampled_returns <span class="ot">&lt;-</span> <span class="fu">sample</span>(market_returns<span class="sc">$</span>market_return, <span class="at">size =</span> <span class="fu">nrow</span>(market_returns), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (rate <span class="cf">in</span> withdrawal_rates) {</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>      pension_stream <span class="ot">&lt;-</span> <span class="fu">simulate_trs_income</span>(</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">monthly_pension =</span> pension_income,</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">inflation_rate =</span> fixed_inflation,</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">retirement_years =</span> retirement_period</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>      orp_simulation <span class="ot">&lt;-</span> <span class="fu">simulate_orp_balance</span>(</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">account_balance =</span> initial_balance,</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">withdrawal_rate =</span> rate,</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">market_returns =</span> sampled_returns,</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">retirement_years =</span> retirement_period</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>      results <span class="ot">&lt;-</span> results <span class="sc">%&gt;%</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>        <span class="fu">bind_rows</span>(</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>          <span class="fu">tibble</span>(</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>            <span class="at">simulation_id =</span> sim,</span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>            <span class="at">month =</span> <span class="dv">1</span><span class="sc">:</span>(retirement_period <span class="sc">*</span> <span class="dv">12</span>),</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>            <span class="at">pension_income =</span> pension_stream,</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>            <span class="at">orp_withdrawal =</span> orp_simulation<span class="sc">$</span>withdrawal,</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>            <span class="at">orp_balance =</span> orp_simulation<span class="sc">$</span>balance,</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>            <span class="at">withdrawal_rate =</span> rate</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(results)</span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate TRS income</span></span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>simulate_trs_income <span class="ot">&lt;-</span> <span class="cf">function</span>(monthly_pension, inflation_rate, retirement_years) {</span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>  num_months <span class="ot">&lt;-</span> retirement_years <span class="sc">*</span> <span class="dv">12</span></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>  income <span class="ot">&lt;-</span> <span class="fu">numeric</span>(num_months)</span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (month <span class="cf">in</span> <span class="fu">seq_len</span>(num_months)) {</span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (month <span class="sc">==</span> <span class="dv">1</span>) {</span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>      income[month] <span class="ot">&lt;-</span> monthly_pension</span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (month <span class="sc">%%</span> <span class="dv">12</span> <span class="sc">==</span> <span class="dv">1</span>) {</span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>      income[month] <span class="ot">&lt;-</span> income[month <span class="sc">-</span> <span class="dv">1</span>] <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">+</span> inflation_rate)</span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a>      income[month] <span class="ot">&lt;-</span> income[month <span class="sc">-</span> <span class="dv">1</span>]</span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(income)</span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate ORP performance</span></span>
+<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a>simulate_orp_balance <span class="ot">&lt;-</span> <span class="cf">function</span>(account_balance, withdrawal_rate, market_returns, retirement_years) {</span>
+<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a>  num_months <span class="ot">&lt;-</span> retirement_years <span class="sc">*</span> <span class="dv">12</span></span>
+<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a>  withdrawal <span class="ot">&lt;-</span> <span class="fu">numeric</span>(num_months)</span>
+<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a>  balance <span class="ot">&lt;-</span> <span class="fu">numeric</span>(num_months)</span>
+<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (month <span class="cf">in</span> <span class="fu">seq_len</span>(num_months)) {</span>
+<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a>    monthly_return <span class="ot">&lt;-</span> market_returns[(month <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">%%</span> <span class="fu">length</span>(market_returns) <span class="sc">+</span> <span class="dv">1</span>]</span>
+<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a>    account_balance <span class="ot">&lt;-</span> account_balance <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">+</span> monthly_return)</span>
+<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a>    withdrawal_amount <span class="ot">&lt;-</span> account_balance <span class="sc">*</span> withdrawal_rate <span class="sc">/</span> <span class="dv">12</span></span>
+<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a>    withdrawal[month] <span class="ot">&lt;-</span> <span class="fu">min</span>(account_balance, withdrawal_amount)</span>
+<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a>    account_balance <span class="ot">&lt;-</span> account_balance <span class="sc">-</span> withdrawal[month]</span>
+<span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a>    balance[month] <span class="ot">&lt;-</span> account_balance</span>
+<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-78"><a href="#cb11-78" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">withdrawal =</span> withdrawal, <span class="at">balance =</span> balance))</span>
+<span id="cb11-79"><a href="#cb11-79" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-80"><a href="#cb11-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-81"><a href="#cb11-81" aria-hidden="true" tabindex="-1"></a><span class="co"># Analyze simulation results</span></span>
+<span id="cb11-82"><a href="#cb11-82" aria-hidden="true" tabindex="-1"></a>analyze_simulation <span class="ot">&lt;-</span> <span class="cf">function</span>(simulation_data, num_simulations) {</span>
+<span id="cb11-83"><a href="#cb11-83" aria-hidden="true" tabindex="-1"></a>  depletion_probability <span class="ot">&lt;-</span> simulation_data <span class="sc">%&gt;%</span></span>
+<span id="cb11-84"><a href="#cb11-84" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(orp_balance <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-85"><a href="#cb11-85" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">probability =</span> <span class="fu">n_distinct</span>(simulation_id) <span class="sc">/</span> num_simulations) <span class="sc">%&gt;%</span></span>
+<span id="cb11-86"><a href="#cb11-86" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(probability)</span>
+<span id="cb11-87"><a href="#cb11-87" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-88"><a href="#cb11-88" aria-hidden="true" tabindex="-1"></a>  income_exceeds_trs_probability <span class="ot">&lt;-</span> simulation_data <span class="sc">%&gt;%</span></span>
+<span id="cb11-89"><a href="#cb11-89" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(simulation_id, withdrawal_rate) <span class="sc">%&gt;%</span></span>
+<span id="cb11-90"><a href="#cb11-90" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">orp_better =</span> <span class="fu">mean</span>(orp_withdrawal <span class="sc">&gt;</span> pension_income), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-91"><a href="#cb11-91" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">probability =</span> <span class="fu">mean</span>(orp_better <span class="sc">&gt;</span> <span class="fl">0.5</span>), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-92"><a href="#cb11-92" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(probability)</span>
+<span id="cb11-93"><a href="#cb11-93" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-94"><a href="#cb11-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">depletion_probability =</span> depletion_probability,</span>
+<span id="cb11-95"><a href="#cb11-95" aria-hidden="true" tabindex="-1"></a>              <span class="at">income_exceeds_trs_probability =</span> income_exceeds_trs_probability))</span>
+<span id="cb11-96"><a href="#cb11-96" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-97"><a href="#cb11-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-98"><a href="#cb11-98" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters for the simulation</span></span>
+<span id="cb11-99"><a href="#cb11-99" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2024</span>)</span>
+<span id="cb11-100"><a href="#cb11-100" aria-hidden="true" tabindex="-1"></a>num_simulations <span class="ot">&lt;-</span> <span class="dv">200</span></span>
+<span id="cb11-101"><a href="#cb11-101" aria-hidden="true" tabindex="-1"></a>initial_balance <span class="ot">&lt;-</span> <span class="dv">300000</span></span>
+<span id="cb11-102"><a href="#cb11-102" aria-hidden="true" tabindex="-1"></a>pension_income <span class="ot">&lt;-</span> <span class="dv">3000</span></span>
+<span id="cb11-103"><a href="#cb11-103" aria-hidden="true" tabindex="-1"></a>withdrawal_rates <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.04</span>, <span class="fl">0.07</span>)</span>
+<span id="cb11-104"><a href="#cb11-104" aria-hidden="true" tabindex="-1"></a>fixed_inflation <span class="ot">&lt;-</span> <span class="fl">0.02</span></span>
+<span id="cb11-105"><a href="#cb11-105" aria-hidden="true" tabindex="-1"></a>retirement_period <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb11-106"><a href="#cb11-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-107"><a href="#cb11-107" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate market return data</span></span>
+<span id="cb11-108"><a href="#cb11-108" aria-hidden="true" tabindex="-1"></a>market_returns <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb11-109"><a href="#cb11-109" aria-hidden="true" tabindex="-1"></a>  <span class="at">market_return =</span> <span class="fu">rnorm</span>(retirement_period <span class="sc">*</span> <span class="dv">12</span>, <span class="at">mean =</span> <span class="fl">0.04</span> <span class="sc">/</span> <span class="dv">12</span>, <span class="at">sd =</span> <span class="fl">0.05</span>)</span>
+<span id="cb11-110"><a href="#cb11-110" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-111"><a href="#cb11-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-112"><a href="#cb11-112" aria-hidden="true" tabindex="-1"></a><span class="co"># Run simulations for each withdrawal rate</span></span>
+<span id="cb11-113"><a href="#cb11-113" aria-hidden="true" tabindex="-1"></a>simulation_results <span class="ot">&lt;-</span> <span class="fu">simulate_monte_carlo</span>(</span>
+<span id="cb11-114"><a href="#cb11-114" aria-hidden="true" tabindex="-1"></a>  <span class="at">num_simulations =</span> num_simulations,</span>
+<span id="cb11-115"><a href="#cb11-115" aria-hidden="true" tabindex="-1"></a>  <span class="at">initial_balance =</span> initial_balance,</span>
+<span id="cb11-116"><a href="#cb11-116" aria-hidden="true" tabindex="-1"></a>  <span class="at">pension_income =</span> pension_income,</span>
+<span id="cb11-117"><a href="#cb11-117" aria-hidden="true" tabindex="-1"></a>  <span class="at">withdrawal_rates =</span> withdrawal_rates,</span>
+<span id="cb11-118"><a href="#cb11-118" aria-hidden="true" tabindex="-1"></a>  <span class="at">fixed_inflation =</span> fixed_inflation,</span>
+<span id="cb11-119"><a href="#cb11-119" aria-hidden="true" tabindex="-1"></a>  <span class="at">market_returns =</span> market_returns</span>
+<span id="cb11-120"><a href="#cb11-120" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-121"><a href="#cb11-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-122"><a href="#cb11-122" aria-hidden="true" tabindex="-1"></a><span class="co"># Analyze the results</span></span>
+<span id="cb11-123"><a href="#cb11-123" aria-hidden="true" tabindex="-1"></a>results_analysis <span class="ot">&lt;-</span> simulation_results <span class="sc">%&gt;%</span></span>
+<span id="cb11-124"><a href="#cb11-124" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(withdrawal_rate) <span class="sc">%&gt;%</span></span>
+<span id="cb11-125"><a href="#cb11-125" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb11-126"><a href="#cb11-126" aria-hidden="true" tabindex="-1"></a>    <span class="at">depletion_probability =</span> <span class="fu">mean</span>(orp_balance <span class="sc">==</span> <span class="dv">0</span>),</span>
+<span id="cb11-127"><a href="#cb11-127" aria-hidden="true" tabindex="-1"></a>    <span class="at">income_exceeds_trs_probability =</span> <span class="fu">mean</span>(orp_withdrawal <span class="sc">&gt;</span> pension_income),</span>
+<span id="cb11-128"><a href="#cb11-128" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
+<span id="cb11-129"><a href="#cb11-129" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb11-130"><a href="#cb11-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-131"><a href="#cb11-131" aria-hidden="true" tabindex="-1"></a><span class="co"># Beautify and display the results</span></span>
+<span id="cb11-132"><a href="#cb11-132" aria-hidden="true" tabindex="-1"></a>results_analysis <span class="sc">%&gt;%</span></span>
+<span id="cb11-133"><a href="#cb11-133" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb11-134"><a href="#cb11-134" aria-hidden="true" tabindex="-1"></a>    <span class="at">depletion_probability =</span> <span class="fu">round</span>(depletion_probability <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),</span>
+<span id="cb11-135"><a href="#cb11-135" aria-hidden="true" tabindex="-1"></a>    <span class="at">income_exceeds_trs_probability =</span> <span class="fu">round</span>(income_exceeds_trs_probability <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>)</span>
+<span id="cb11-136"><a href="#cb11-136" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb11-137"><a href="#cb11-137" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb11-138"><a href="#cb11-138" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb11-139"><a href="#cb11-139" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Monte Carlo Analysis Results&quot;</span>,</span>
+<span id="cb11-140"><a href="#cb11-140" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Comparison of TRS and ORP Outcomes&quot;</span></span>
+<span id="cb11-141"><a href="#cb11-141" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb11-142"><a href="#cb11-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
+<span id="cb11-143"><a href="#cb11-143" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(depletion_probability, income_exceeds_trs_probability),</span>
+<span id="cb11-144"><a href="#cb11-144" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">2</span></span>
+<span id="cb11-145"><a href="#cb11-145" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb11-146"><a href="#cb11-146" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb11-147"><a href="#cb11-147" aria-hidden="true" tabindex="-1"></a>    <span class="at">withdrawal_rate =</span> <span class="st">&quot;Withdrawal Rate&quot;</span>,</span>
+<span id="cb11-148"><a href="#cb11-148" aria-hidden="true" tabindex="-1"></a>    <span class="at">depletion_probability =</span> <span class="st">&quot;ORP Depletion Probability (%)&quot;</span>,</span>
+<span id="cb11-149"><a href="#cb11-149" aria-hidden="true" tabindex="-1"></a>    <span class="at">income_exceeds_trs_probability =</span> <span class="st">&quot;ORP Exceeds TRS Probability (%)&quot;</span></span>
+<span id="cb11-150"><a href="#cb11-150" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb11-151"><a href="#cb11-151" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(</span>
+<span id="cb11-152"><a href="#cb11-152" aria-hidden="true" tabindex="-1"></a>    <span class="at">table.width =</span> <span class="fu">px</span>(<span class="dv">700</span>),</span>
+<span id="cb11-153"><a href="#cb11-153" aria-hidden="true" tabindex="-1"></a>    <span class="at">column_labels.font.weight =</span> <span class="st">&quot;bold&quot;</span></span>
+<span id="cb11-154"><a href="#cb11-154" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="dnkxkeriob" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#dnkxkeriob table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#dnkxkeriob thead, #dnkxkeriob tbody, #dnkxkeriob tfoot, #dnkxkeriob tr, #dnkxkeriob td, #dnkxkeriob th {
+  border-style: none;
+}
+
+#dnkxkeriob p {
+  margin: 0;
+  padding: 0;
+}
+
+#dnkxkeriob .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 700px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#dnkxkeriob .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#dnkxkeriob .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#dnkxkeriob .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#dnkxkeriob .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dnkxkeriob .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dnkxkeriob .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dnkxkeriob .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#dnkxkeriob .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#dnkxkeriob .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#dnkxkeriob .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#dnkxkeriob .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#dnkxkeriob .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#dnkxkeriob .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#dnkxkeriob .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#dnkxkeriob .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#dnkxkeriob .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#dnkxkeriob .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#dnkxkeriob .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dnkxkeriob .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#dnkxkeriob .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#dnkxkeriob .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#dnkxkeriob .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dnkxkeriob .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#dnkxkeriob .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#dnkxkeriob .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dnkxkeriob .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dnkxkeriob .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#dnkxkeriob .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dnkxkeriob .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#dnkxkeriob .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dnkxkeriob .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dnkxkeriob .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dnkxkeriob .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dnkxkeriob .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dnkxkeriob .gt_left {
+  text-align: left;
+}
+
+#dnkxkeriob .gt_center {
+  text-align: center;
+}
+
+#dnkxkeriob .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#dnkxkeriob .gt_font_normal {
+  font-weight: normal;
+}
+
+#dnkxkeriob .gt_font_bold {
+  font-weight: bold;
+}
+
+#dnkxkeriob .gt_font_italic {
+  font-style: italic;
+}
+
+#dnkxkeriob .gt_super {
+  font-size: 65%;
+}
+
+#dnkxkeriob .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#dnkxkeriob .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#dnkxkeriob .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#dnkxkeriob .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#dnkxkeriob .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#dnkxkeriob .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#dnkxkeriob .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#dnkxkeriob .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#dnkxkeriob div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_heading">
+<th colspan="3" class="gt_heading gt_title gt_font_normal">Monte Carlo Analysis Results</th>
+</tr>
+<tr class="odd gt_heading">
+<th colspan="3" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Comparison of TRS and ORP Outcomes</th>
+</tr>
+<tr class="header gt_col_headings">
+<th id="withdrawal_rate" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Withdrawal Rate</th>
+<th id="depletion_probability" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">ORP Depletion Probability (%)</th>
+<th id="income_exceeds_trs_probability" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">ORP Exceeds TRS Probability (%)</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_right" headers="withdrawal_rate">0.04</td>
+<td class="gt_row gt_right" headers="depletion_probability">0.00</td>
+<td class="gt_row gt_right" headers="income_exceeds_trs_probability">3.22</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="withdrawal_rate">0.07</td>
+<td class="gt_row gt_right" headers="depletion_probability">0.00</td>
+<td class="gt_row gt_right" headers="income_exceeds_trs_probability">3.44</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<section id="results-and-key-insights" class="level3" data-number="10.1">
+<h3 data-number="10.1"><span class="header-section-number">10.1</span> Results and Key Insights</h3>
+<p><strong>ORP Depletion Probability</strong>:</p>
+<ul>
+<li><p>At a 4% withdrawal rate, ORP funds are highly likely to last through retirement, with a depletion probability of nearly 0%.</p></li>
+<li><p>At a 7% withdrawal rate, the depletion probability increases significantly due to higher monthly withdrawals, which may exhaust savings early if market returns are poor.</p></li>
+</ul>
+<p><strong>ORP vs. TRS Income</strong>:</p>
+<ul>
+<li><p>For a 4% withdrawal rate, ORP income rarely exceeds TRS income due to the consistent inflation-adjusted monthly pension provided by TRS.</p></li>
+<li><p>At a 7% withdrawal rate, ORP income has a higher chance of exceeding TRS income in the short term, but this comes at the expense of long-term sustainability, increasing the depletion probability.</p></li>
+</ul>
+</section>
+<section id="key-findings" class="level3" data-number="10.2">
+<h3 data-number="10.2"><span class="header-section-number">10.2</span> Key Findings:</h3>
+<ul>
+<li><p><strong>Stability of TRS</strong>: TRS provides a predictable, inflation-adjusted income, ideal for risk-averse retirees seeking financial stability.</p></li>
+<li><p><strong>Flexibility of ORP</strong>: ORP offers flexibility and potential for higher returns, but only at the cost of higher risk, particularly with aggressive withdrawal rates.</p></li>
+</ul>
+<div id="quarto-navigation-envelope" class="hidden">
+<p><span class="hidden quarto-markdown-envelope-contents" data-render-id="quarto-int-sidebar-title">STA 9750 2024 Submission Material</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="quarto-int-navbar-title">STA 9750 2024 Submission Material</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="quarto-int-navbar:Mini-project 1">Mini-project 1</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="quarto-int-navbar:/./mp01.html">/./mp01.html</span></p>
+</div>
+<div id="quarto-meta-markdown" class="hidden">
+<p><span class="hidden quarto-markdown-envelope-contents" data-render-id="quarto-metatitle">Mini-Project #04: Monte Carlo-Informed Selection of CUNY Retirement Plans – STA 9750 2024 Submission Material</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="quarto-twittercardtitle">Mini-Project #04: Monte Carlo-Informed Selection of CUNY Retirement Plans – STA 9750 2024 Submission Material</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="quarto-ogcardtitle">Mini-Project #04: Monte Carlo-Informed Selection of CUNY Retirement Plans – STA 9750 2024 Submission Material</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="quarto-metasitename">STA 9750 2024 Submission Material</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="quarto-twittercarddesc">Course Projects for STA 9750 at Baruch College</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="quarto-ogcardddesc">Course Projects for STA 9750 at Baruch College</span></p>
+</div>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id = "quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/whaleron\.github\.io\/STA9750-2024-FALL\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+</body>
+
+</html>

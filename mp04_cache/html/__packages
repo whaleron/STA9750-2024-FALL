@@ -1,0 +1,16 @@
+lubridate
+httr2
+dplyr
+ggplot2
+tidyr
+fuzzyjoin
+purrr
+tibble
+knitr
+DT
+jsonlite
+stringr
+gt
+tidyverse
+readr
+forcats

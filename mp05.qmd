@@ -45,13 +45,13 @@ The city’s ambitious zero-waste initiative aims to send [**zero waste to landf
 
 This initiative is not without challenges. Public adoption remains inconsistent, and the effectiveness of composting infrastructure in densely populated neighborhoods is still under scrutiny. With fines for non-compliance set to begin in mid-2025, NYC’s composting program represents a bold effort to achieve environmental sustainability while addressing logistical and behavioral hurdles. This study focuses on one key aspect of this initiative: food scrap drop-off sites and their relationship with rat complaints, a critical public health and urban management concern.
 
-### **What the two datasets were chosen for this analysis?**
+### What the two datasets were chosen for this analysis?
 
-#### **Food Scrap Dataset**
+#### Food Scrap Dataset
 
 The food scrap drop-off location dataset was selected because it directly correlates with NYC's composting initiatives aimed at reducing landfill waste. This dataset provides geographical information about drop-off site locations, making it possible to evaluate their impact on rodent activity. By mapping these sites and analyzing their proximity to rat complaints, the study aims to assess whether their presence mitigates or exacerbates rodent infestations.
 
-#### **Rat Sightings Dataset**
+#### Rat Sightings Dataset
 
 The rat sightings dataset was chosen due to its comprehensive reporting of rodent activity across NYC. This dataset includes key information, such as the date, location, and descriptions of complaints, allowing for temporal and spatial analysis. The five-year timeframe offers a meaningful period to identify trends and seasonality, providing insights into how food scrap sites might influence rat activity over time. The combination of these datasets allows for a targeted analysis of the relationship between urban sustainability initiatives and public health challenges.
 

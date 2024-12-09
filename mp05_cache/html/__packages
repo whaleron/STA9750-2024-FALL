@@ -1,0 +1,11 @@
+dplyr
+lubridate
+ggplot2
+sf
+tmaptools
+httr
+jsonlite
+tidyr
+leaflet
+knitr
+kableExtra

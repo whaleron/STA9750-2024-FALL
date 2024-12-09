@@ -1,0 +1,583 @@
+---
+title: "Final Project (Rat Pack): Food Scrap Drop-Off Sites & Rat Population"
+author: "Valeriia Frolova"
+editor: visual
+toc: true  # Enables the Table of Contents
+toc-depth: 2  # Controls the depth of heading levels included in the outline (h1, h2)
+number-sections: false  # Disables numbering of sections
+format:
+  html:
+    toc-location: left  # Optional: Place the ToC on the left side
+    toc-floating: true  # Enable a floating (sticky) ToC
+---
+
+## Introduction
+
+Rats in NYC are a notorious part of urban life, often associated with the city’s dense infrastructure and vast waste production. They live in sewers, subways, and parks, and have become a public health concern.
+
+Overarching question is:
+
+**What influences the likelihood of rat infestations in different NYC neighborhoods?**
+
+NYC open data sources used for this project:
+
+-   [NYC Health Data](https://www.nyc.gov/site/doh/data/data-home.page)
+
+-   [Rodent Inspection](https://data.cityofnewyork.us/Health/Rodent-Inspection/p937-wjvj/about_data)
+
+-   [Rats, Heat Map](https://data.cityofnewyork.us/Social-Services/Rats-Heat-Map/g642-4e55)
+
+-   [Annual Income Heat Map](https://data.cccnewyork.org/data/bar/66/median-incomes#66/39/1/107/127)
+
+-   [NYC- Restaurant- Inspection Results](https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/data)
+
+-   [Food Scrap Drop-Off Locations](https://data.cityofnewyork.us/Environment/Food-Scrap-Drop-Off-Locations-Map/n5y5-3ud3)
+
+While my teammates explore topics such as NYC DOH programs, socioeconomic factors, restaurants, and transportation—examining their connection to infestations—I will focus on:
+
+*Are Food Scrap Drop-Off Sites Helping or Hurting?*
+
+## Important statistics & problem
+
+NYC’s composting program is a cornerstone of the city’s zero-waste goals, aiming to divert organic waste from landfills and reduce greenhouse gas emissions. The program initially began as a pilot project in select neighborhoods and has since expanded to include all five boroughs, with full implementation expected by 2025. Organic waste, which includes food scraps and yard waste, constitutes approximately **34% of NYC’s total waste stream**, according to the [NYC Department of Sanitation (DSNY)](https://dsny.cityofnewyork.us/wp-content/uploads/2018/04/2017-Waste-Characterization-Study.pdf). Diverting this waste from landfills can significantly reduce methane emissions, a greenhouse gas that is [**25 times more potent than carbon dioxide**](https://www.doi.gov/sites/doi.gov/files/uploads/methane_waste_prevention_rule_factsheet.pdf) in trapping heat.
+
+The city’s ambitious zero-waste initiative aims to send [**zero waste to landfills by 2030**](https://www.nyc.gov/site/sustainability/initiatives/zero-waste-challenge.page), aligning with broader climate goals. NYC’s composting efforts have already made a measurable impact. For example, in areas where curbside composting was piloted, participation rates reached [more than **40%**](https://www.nyc.gov/office-of-the-mayor/news/738-24/mayor-adams-completion-roll-out-first-ever-no-cost-pain-free-citywide-curbside), and composting diverted tens of thousands of tons of organic waste annually. By expanding food scrap drop-off locations and introducing mandatory composting rules in 2025, NYC aims to increase these figures dramatically. The program’s potential benefits extend beyond waste reduction to include enriching local soils, reducing the city’s reliance on chemical fertilizers, and improving public spaces.
+
+This initiative is not without challenges. Public adoption remains inconsistent, and the effectiveness of composting infrastructure in densely populated neighborhoods is still under scrutiny. With fines for non-compliance set to begin in mid-2025, NYC’s composting program represents a bold effort to achieve environmental sustainability while addressing logistical and behavioral hurdles. This study focuses on one key aspect of this initiative: food scrap drop-off sites and their relationship with rat complaints, a critical public health and urban management concern.
+
+### **What the two datasets were chosen for this analysis?**
+
+#### **Food Scrap Dataset**
+
+The food scrap drop-off location dataset was selected because it directly correlates with NYC's composting initiatives aimed at reducing landfill waste. This dataset provides geographical information about drop-off site locations, making it possible to evaluate their impact on rodent activity. By mapping these sites and analyzing their proximity to rat complaints, the study aims to assess whether their presence mitigates or exacerbates rodent infestations.
+
+#### **Rat Sightings Dataset**
+
+The rat sightings dataset was chosen due to its comprehensive reporting of rodent activity across NYC. This dataset includes key information, such as the date, location, and descriptions of complaints, allowing for temporal and spatial analysis. The five-year timeframe offers a meaningful period to identify trends and seasonality, providing insights into how food scrap sites might influence rat activity over time. The combination of these datasets allows for a targeted analysis of the relationship between urban sustainability initiatives and public health challenges.
+
+```{r, echo=TRUE, message=FALSE}
+#| code-fold: true
+#| code-summary: "Import Libraries"
+#| message: false 
+#| warning: false
+#| cache: true
+library(dplyr)
+library(lubridate)
+library(ggplot2)
+library(sf) # Spatial operations
+library(tmaptools)
+library(httr)
+library(jsonlite)
+library(tidyr)
+library(knitr)
+library(kableExtra)
+```
+
+```{r, echo=TRUE, message=FALSE}
+#| code-fold: true
+#| code-summary: "Import Datasets"
+#| message: false 
+#| warning: false
+#| cache: true
+food_scrap <- read.csv("/Users/valeriafrolova/Desktop/R-Rats/Food_Scrap_With_Zip.csv")
+rat_sightings <- read.csv("/Users/valeriafrolova/Desktop/R-Rats/Rat_Sightings_20241002.csv")
+```
+
+## Data cleaning & manipulation
+
+The food scraps dataset lacked ZIP codes and included only longitude and latitude information. To address this, the "Nominatim" package was utilized in Python to populate missing ZIP codes. This preprocessing step ensured that the data was ready for further manipulation and analysis. Before loading the dataset, geocoding was conducted to assign ZIP codes to food scrap locations, creating a more structured and analyzable dataset. This step allowed the integration of geographic data with rat complaints data for a more targeted analysis.
+
+```{r, echo=TRUE, message=FALSE}
+#| code-fold: true
+#| code-summary: "Step 1. Zips for Food Scrap Locations: Python geocode example with Nominatim"
+#| message: false 
+#| warning: false
+#| cache: true
+# import pandas as pd
+# from geopy.geocoders import Nominatim
+# from geopy.exc import GeocoderTimedOut
+# import time
+# 
+# # Initialize the geolocator
+# geolocator = Nominatim(user_agent="geoapi")
+# 
+# # Function to validate latitude and longitude
+# def is_valid_coordinate(lat, lon):
+#     """Check if the latitude and longitude are valid."""
+#     return -90 <= lat <= 90 and -180 <= lon <= 180
+# 
+# # Function to fetch the zipcode for a given latitude and longitude
+# def get_zipcode(lat, lon, retry_count=3):
+#     """Fetch zipcode for given latitude and longitude, retrying on timeout."""
+#     if not is_valid_coordinate(lat, lon):
+#         print(f"Invalid coordinates: Latitude={lat}, Longitude={lon}")
+#         return None
+#     for attempt in range(retry_count):
+#         try:
+#             location = geolocator.reverse((lat, lon), timeout=10)
+#             if location and 'postcode' in location.raw['address']:
+#                 return location.raw['address']['postcode']
+#             return None
+#         except GeocoderTimedOut:
+#             print(f"Timeout occurred for Latitude: {lat}, Longitude: {lon}. Retrying... (Attempt {attempt + 1}/{retry_count})")
+#             time.sleep(2)
+#     print(f"Failed to fetch for Latitude: {lat}, Longitude: {lon} after {retry_count} retries.")
+#     return None
+# 
+# 
+# # Processing in batches
+# batch_size = 1000  # Adjust if necessary for larger datasets
+# zip_codes = []
+# start_time = time.time()
+# 
+# #print(f"Starting to process {len(df_lat)} rows in batches of {batch_size}...")
+# 
+# for i in range(0, len(df_lat), batch_size):
+#     batch = df_lat.iloc[i:i + batch_size]
+#     print(f"Processing rows {i + 1} to {i + len(batch)}...")
+#     batch_zips = batch.apply(lambda row: get_zipcode(row['Latitude'], row['Longitude']), axis=1)
+#     zip_codes.extend(batch_zips)
+#     print(f"Completed rows {i + 1} to {i + len(batch)}. Total processed so far: {i + len(batch)}")
+# 
+# # Add the Zip column to the DataFrame
+# df_lat['Zip'] = zip_codes
+# 
+# end_time = time.time()
+# print(f"Processing completed for all {len(df_lat)} rows in {end_time - start_time:.2f} seconds.")
+```
+
+Rat sighting data was filtered to include only the last five years (2019–2023). This timeframe focused the analysis on recent trends and ensured the data remained relevant to current conditions.
+
+```{r, echo=TRUE, message=FALSE}
+#| code-fold: true
+#| code-summary: "Step 2. Filter Rat Sightings for 2019–2023"
+#| message: false 
+#| warning: false
+#| cache: true
+rat_sightings_last5y <- rat_sightings |>
+  mutate(Created_Date = mdy_hms(`Created.Date`)) |>  # Convert to date format
+  filter(Created_Date >= as.Date("2019-01-01") & Created_Date <= as.Date("2023-12-31"))
+```
+
+The filtered rat complaints data was merged with food scrap locations, retaining only those ZIP codes that correspond to food scrap sites. This step connected the datasets and provided the foundation for comparing complaints and bin density.
+
+```{r, echo=TRUE, message=FALSE}
+#| code-fold: true
+#| code-summary: "Step 3. Filter rat complaints for ZIPs in food scraps"
+#| message: false 
+#| warning: false
+#| cache: true
+valid_zips <- unique(food_scrap$Zip)
+
+filtered_complaints <- rat_sightings_last5y |>
+  mutate(Incident.Zip = as.integer(Incident.Zip)) |>  # Convert to integer for consistency
+  filter(Incident.Zip %in% valid_zips)
+```
+
+To determine which ZIP codes experienced the highest number of rat complaints, complaints were aggregated per ZIP. This provided a clearer picture of geographic hotspots for rodent activity near food scrap drop-off locations.
+
+```{r, echo=TRUE, message=FALSE}
+#| code-fold: true
+#| code-summary: "Step 4. Count complaints per ZIP"
+#| message: false 
+#| warning: false
+#| cache: true
+# Count complaints per ZIP
+complaints_per_zip <- filtered_complaints |>
+  group_by(Incident.Zip) |>
+  summarise(Complaints = n(), .groups = "drop") |>
+  arrange(desc(Complaints))
+
+```
+
+## Which zip codes have the highest number of reported rat sightings, and how do these zip codes correspond to food scrap drop-off locations?
+
+To evaluate the impact of food scrap drop-off sites in the area and determine whether their locations influence outcomes, the first step involves counting the number of bins per ZIP code.
+
+```{r, echo=TRUE, message=FALSE}
+#| code-fold: true
+#| code-summary: "MoM: Count how many food scrap locations per zip"
+#| message: false 
+#| warning: false
+#| cache: true
+# Add Year and Month columns
+filtered_complaints <- filtered_complaints |>
+  mutate(
+    Year = year(Created_Date),
+    Month = month(Created_Date, label = TRUE, abbr = TRUE)
+  )
+
+# Count complaints by ZIP, Year, and Month
+complaints_by_zip_time <- filtered_complaints |>
+  group_by(Incident.Zip, Year, Month) |>
+  summarise(Complaints = n(), .groups = "drop")
+
+# Count the number of food scrap locations per ZIP
+food_scrap <- food_scrap |>
+  mutate(Zip = as.integer(Zip))  # Ensure consistent type
+
+food_scrap_summary <- food_scrap |>
+  group_by(Zip) |>
+  summarise(NumberOfFoodScraps = n(), .groups = "drop")
+
+# Merge complaints data with food scrap data
+final_dataset <- complaints_by_zip_time |>
+  left_join(food_scrap_summary, by = c("Incident.Zip" = "Zip")) |>
+  rename(Zip = Incident.Zip)
+
+# Replace NA in NumberOfFoodScraps with 0
+final_dataset <- final_dataset |>
+  mutate(NumberOfFoodScraps = replace_na(NumberOfFoodScraps, 0))
+
+# View final dataset
+# head(final_dataset)
+```
+
+A correlation coefficient of **0.59** indicates a **moderate positive correlation** between `TotalComplaints` (rat sightings) and `NumberOfFoodScraps` (food scrap drop-off sites).
+
+```{r, echo=TRUE, message=FALSE}
+#| code-fold: true
+#| code-summary: "Zip, Total Complaints, Bin Counts and Correlation"
+#| message: false 
+#| warning: false
+#| cache: true
+
+# Group by ZIP for total complaints and food scrap counts
+grouped_data <- final_dataset |>
+  group_by(Zip) |>
+  summarise(
+    TotalComplaints = sum(Complaints, na.rm = TRUE),
+    NumberOfFoodScraps = first(NumberOfFoodScraps),
+    .groups = "drop"
+  ) |>
+  arrange(desc(TotalComplaints))
+
+# Show only the first 10 rows
+top_10_grouped_data <- head(grouped_data, 10)
+
+kable(
+  top_10_grouped_data,
+  col.names = c("ZIP Code", "Total Complaints", "Number of Food Scrap Sites"),
+  caption = "Summary of Total Rat Complaints and Food Scrap Site Counts by ZIP Code",
+  digits = 2  # Round numerical values to 2 decimal places for clarity
+) |>
+  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover", "condensed"))
+
+# Calculate correlation
+correlation <- cor(grouped_data$TotalComplaints, grouped_data$NumberOfFoodScraps, use = "complete.obs")
+
+# Print the correlation
+cat("The correlation is:", correlation, "\n")
+```
+
+As the number of food scrap drop-off sites increases, the number of rat complaints also tends to increase moderately.This could suggest that areas with more food scrap drop-off sites might also experience more rat activity. However, correlation does not imply causation—other factors (e.g., population density, waste management, or urban environment) could be contributing to both complaints and drop-off site density.
+
+Next, the `ComplaintsPerSite` metric was calculated to identify ZIP codes where the number of complaints is disproportionately high compared to the number of food scrap drop-off sites. The ZIP codes were sorted by this ratio in descending order to prioritize areas with the highest complaints per site. This helps in identifying regions where food scrap site density may be inadequate or where management practices might need improvement.
+
+```{r, echo=TRUE, message=FALSE}
+#| code-fold: true
+#| code-summary: "Ratio Foodcrap to Reports"
+#| message: false 
+#| warning: false
+#| cache: true
+# Calculate ComplaintsPerSite and reorder by this ratio
+grouped_data <- grouped_data |>
+  mutate(ComplaintsPerSite = TotalComplaints / NumberOfFoodScraps) |>
+  arrange(desc(ComplaintsPerSite))
+
+# Show only the top 10 rows
+top_10_complaints_per_site <- head(grouped_data, 10)
+
+kable(
+  top_10_complaints_per_site,
+  col.names = c("ZIP Code", "Total Complaints", "Number of Food Scrap Sites", "Complaints Per Site"),
+  caption = "Top 10 ZIP Codes by Complaints Per Food Scrap Site",
+  digits = 2  # Round numerical values to 2 decimal places
+) |>
+  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover", "condensed"))
+
+# Filter for the top 5 ZIP codes by Total Complaints
+top_zip_data <- grouped_data |>
+  slice_max(order_by = TotalComplaints, n = 5)
+```
+
+The visualization combines a bar chart (for food scrap site count) with a line chart (for total complaints) to provide a comparative view.
+
+```{r, echo=TRUE, message=FALSE}
+#| code-fold: true
+#| code-summary: "Visual: Ratio Foodcrap to Report"
+#| message: false 
+#| warning: false
+#| cache: true
+
+ggplot(top_zip_data, aes(x = factor(Zip, levels = as.character(top_zip_data$Zip)))) +
+  # Bar chart for Number of Food Scrap Sites
+  geom_bar(aes(y = NumberOfFoodScraps, fill = "Food Scrap Sites"), stat = "identity", width = 0.5, color = "black") +
+  # Add labels to the bars
+  geom_text(aes(y = NumberOfFoodScraps, label = NumberOfFoodScraps), vjust = -0.5, color = "black", size = 4) +
+  # Line chart for Total Complaints
+  geom_line(aes(y = TotalComplaints / 50, group = 1, color = "Total Complaints"), size = 1.2) +
+  geom_point(aes(y = TotalComplaints / 50, color = "Total Complaints"), size = 3) +
+  # Dual y-axis scaling
+  scale_y_continuous(
+    name = "Number of Food Scrap Sites",
+    sec.axis = sec_axis(~ . * 50, name = "Total Complaints")
+  ) +
+  # Labels and theme
+  labs(
+    x = "ZIP Code",
+    title = "Top 5 ZIP Codes with Rat Sightings and Food Scrap Drop-Off Sites",
+    fill = "Legend",
+    color = "Legend"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "top"
+  )
+```
+
+Now, I will show these zip codes to understand what are actually those areas visually and most belong to Brooklyn and Queens.
+
+```{r, echo=TRUE, message=FALSE}
+#| code-fold: true
+#| code-summary: "Mapping top complaints per site"
+#| message: false 
+#| warning: false
+#| cache: true
+# Load required library
+library(leaflet)
+
+# Create data frame with the ZIP code, latitude, and longitude
+zip_data <- data.frame(
+  Zip = c(11385, 11211, 11205, 11220, 11201, 11209, 11105, 11368, 11215, 11222),
+  Latitude = c(40.707547, 40.71974, 40.69300171, 40.635514, 40.701501, 40.6174, 40.7724122, 40.749728, 40.6727118, 40.726863),
+  Longitude = c(-73.864884, -73.953394, -73.9556798, -74.022767, -73.98263, -74.033703, -73.9053388, -73.862513, -73.984731, -73.942259)
+)
+
+# Define a custom rat icon
+rat_icon <- makeIcon(
+  iconUrl = "rat.png",  # Local file path for the rat icon
+  iconWidth = 80,
+  iconHeight = 80
+)
+
+# Create the map with rat icons for all 10 ZIP codes
+map <- leaflet() |>
+  addTiles() |>  # Add default OpenStreetMap tiles
+  addMarkers(
+    lng = zip_data$Longitude,
+    lat = zip_data$Latitude,
+    popup = paste0("ZIP Code: ", zip_data$Zip),
+    icon = rat_icon  # Use the custom rat icon
+  )
+
+# Print the map
+map
+```
+
+## What is the total & average number of rat complaints reported within proximity to food scrap drop-off areas over the past five years?
+
+```{r, echo=TRUE, message=FALSE}
+#| code-fold: true
+#| code-summary: "Total & Avg Complaints near Food Scraps"
+#| message: false 
+#| warning: false
+#| cache: true
+# Filter rat complaints to only those within ZIP codes with food scrap drop-off sites
+filtered_complaints_last5y <- rat_sightings_last5y |>
+  mutate(Incident.Zip = as.integer(Incident.Zip)) |>  # Ensure ZIP codes are integers
+  filter(Incident.Zip %in% valid_zips)
+
+# Calculate total and average complaints for the last 5 years
+complaints_summary_5y <- filtered_complaints_last5y |>
+  summarise(
+    TotalComplaints = n(),  # Total number of complaints
+    AverageComplaints = n() / n_distinct(Incident.Zip)  # Average complaints per ZIP code
+  )
+
+# Display the results in a neat table
+kable(
+  complaints_summary_5y,
+  col.names = c("Total Complaints", "Average Complaints"),
+  caption = "Summary of Rat Complaints Near Food Scrap Drop-Off Sites (Last 5 Years)"
+)
+```
+
+## What months or seasons see an increase in rat sightings on food scrap locations?
+
+This chart shows the trend of rat complaints over the years (2019–2023) for the top 3 ZIP codes with the highest number of food scrap drop-off sites and associated complaints: 10025, 11216, and 11238. Key observations include:
+
+**Peak in 2021:** All three ZIP codes experienced a noticeable spike in rat complaints during 2021, indicating possible environmental or management issues.
+
+**Decline Post-2021:** Complaints began declining for most ZIP codes after 2021, potentially reflecting improved management of food scrap sites or other mitigation efforts.
+
+```{r, echo=TRUE, message=FALSE}
+#| code-fold: true
+#| code-summary: "Complaints Over Years for Top 3 ZIP Codes"
+#| message: false 
+#| warning: false
+#| cache: true
+# Step 1: Identify top 3 ZIP codes by complaints
+top_3_zips <- head(complaints_per_zip$Incident.Zip, 3)
+
+# Step 2: Filter the final dataset to include only the top 5 ZIP codes
+top_3_data <- final_dataset |>
+  filter(Zip %in% top_3_zips)
+
+# Step 3: Aggregate complaints over the years for the top 5 ZIPs
+top_3_yearly <- top_3_data |>
+  group_by(Zip, Year) |>
+  summarise(TotalComplaints = sum(Complaints, na.rm = TRUE), .groups = "drop")
+
+# Step 4: Plot complaints over years for the top 5 ZIP codes
+ggplot(top_3_yearly, aes(x = Year, y = TotalComplaints, color = as.factor(Zip), group = Zip)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  labs(
+    title = "Complaints Over Years for Top 3 ZIP Codes",
+    x = "Year",
+    y = "Total Complaints",
+    color = "ZIP Code"
+  ) +
+  theme_minimal()
+```
+
+Monthly seasonality key observations:
+
+1.  **Seasonal Peaks**:
+
+    -   Rat complaints tend to spike during **summer and early fall months** (e.g., **June to October**), likely due to increased rodent activity in warmer weather and food availability.
+
+2.  **Year-to-Year Variability**:
+
+    -   Complaints show consistent seasonal patterns but vary in intensity across years, with notable spikes in **2021 and 2022**, possibly due to environmental or operational changes.
+
+3.  **Monthly Fluctuations**:
+
+    -   Winter months (e.g., **December to February**) generally show lower complaint counts, suggesting reduced rodent activity during colder seasons.
+
+```{r, echo=TRUE, message=FALSE}
+#| code-fold: true
+#| code-summary: "Complaints Over time"
+#| message: false 
+#| warning: false
+#| cache: true
+# Step 3: Aggregate complaints by ZIP, Year, and Month
+top_3_monthly <- top_3_data |>
+  group_by(Zip, Year, Month) |>
+  summarise(TotalComplaints = sum(Complaints, na.rm = TRUE), .groups = "drop")
+
+# Step 4: Create a datetime column for plotting
+top_3_monthly <- top_3_monthly |>
+  mutate(Date = as.Date(paste(Year, Month, "01", sep = "-"), format = "%Y-%b-%d"))
+
+# Step 5: Plot complaints over time (monthly and yearly) for top 3 ZIP codes
+library(ggplot2)
+
+ggplot(top_3_monthly, aes(x = Date, y = TotalComplaints, color = as.factor(Zip), group = Zip)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  labs(
+    title = "Monthly Complaints Over Time for Top 3 ZIP Codes",
+    x = "Date",
+    y = "Total Complaints",
+    color = "ZIP Code"
+  ) +
+  theme_minimal() +
+  scale_x_date(date_labels = "%b %Y", date_breaks = "2 months") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+The chart indicates that **summer and early fall months** (June to October) see an increase in rat sightings near food scrap drop-off locations. **2022** is the year of particularly high activity, as well during the summer and fall months, as evident from the chart. Complaints remain elevated for extended periods, particularly in ZIP code **10025**.
+
+## What are food scrap drop-off locations in NYC?
+
+Food scrap drop-off locations are designated sites across New York City where residents can dispose of food scraps and other organic waste. These sites are part of NYC's composting initiative to reduce landfill waste and convert organic material into nutrient-rich compost. The program accepts items like fruit and vegetable scraps, coffee grounds, eggshells, and more.
+
+### How do they look in 2024?
+
+In 2024, food scrap drop-off locations in NYC are evolving with increased accessibility and awareness:
+
+1.  **Expanded availability**:
+
+    -   The number of drop-off sites has grown to cover more neighborhoods, ensuring greater proximity to residential areas.
+
+    -   Locations are strategically placed near parks, subway stations, community centers, and farmers' markets.
+
+2.  **Infrastructure**:
+
+    -   Many drop-off locations are equipped with **labeled bins** or **covered containers** to prevent odors and deter pests.
+
+    -   Larger hubs may feature **composting kiosks** with educational displays about proper usage and the benefits of composting.
+
+3.  **Community engagement**:
+
+    -   NYC provides **volunteers and staff** to guide residents and maintain the sites.
+
+    -   New initiatives encourage participation through local composting workshops and awareness campaigns.
+
+4.  **Integration with technology**:
+
+    -   A **real-time locator tool** (via websites and mobile apps) allows residents to find the nearest drop-off sites, along with operational hours and accepted materials.
+
+5.  **Challenges**:
+
+    -   Despite improvements, issues such as improper disposal, pest activity, and site maintenance remain a concern in some neighborhoods.
+
+## Further Analysis: Are Food Scrap Drop-Off Locations Metal Boxes?
+
+![](images/clipboard-1617255921.png)
+
+Yes, many food scrap drop-off locations in NYC use **metal bins or containers**, particularly at outdoor sites, to ensure durability, pest resistance, and ease of maintenance.
+
+These metal boxes are often:
+
+-   **Secured and Covered**: To prevent odors from escaping and to deter pests, including rats.
+
+-   **Labeled**: Clearly marked with instructions about what materials are accepted for composting.
+
+-   **Weather-Resistant**: Designed to withstand NYC's changing weather conditions.
+
+In some community-managed locations or farmers' markets, you might also find **plastic bins** or more decorative containers, but metal bins are preferred for their pest resistance.
+
+**Improvements to existing analysis:** identify plastic bins vs metal boxes. Which keep pests and rodents out?
+
+**There are about 400 smart orange compost bins across the city, available for anyone to use at any time.**
+
+## Composting becomes mandatory in NYC
+
+[By NYTimes:](https://www.nytimes.com/article/curbside-composting-brooklyn.html) "The program, which began in Brooklyn last fall and in Queens the year before, expanded to Manhattan, the Bronx and Staten Island on Oct 6. The city is giving New Yorkers about six months to grow accustomed to curbside before it officially becomes law in the spring of 2025".
+
+### What do New Yorkers think about it?
+
+People are divided, sentiment is mostly negative on new rules and boxes. However, there are people that believe that new waste regulations and fresh ideas can improve city's condition.\
+This is the [Reddit thread](https://www.reddit.com/r/nyc/comments/15zftfn/mandatory_composting_is_coming_to_new_york_city/) from 1 year back when the program was coming live.
+
+![](images/clipboard-2191110021.png)
+
+## Conclusion
+
+The findings of this analysis provide valuable insights into the relationship between food scrap drop-off sites and rat complaints in NYC, but they do not conclusively indicate that these sites are the direct cause of infestations. Over the past five years, we observed a total of 98,141 rat complaints in proximity to food scrap locations, with an average of 773 complaints per ZIP code. A moderate correlation of 0.59 between the number of bins and complaints suggests a potential link, but this alone does not establish causation. Seasonal trends reveal higher complaints during summer and early fall (June to October), likely driven by increased rodent activity in warmer months, while complaints drop significantly during the winter. Year-to-year fluctuations show peaks in specific years, particularly in areas with frequent complaints, reflecting broader patterns that may be influenced by external factors.
+
+Importantly, the analysis highlights that the presence of bins does not always equate to higher infestations. ZIP codes with only one food scrap bin, such as those with a high complaints-to-bin ratio, demonstrate that factors beyond infrastructure—such as population density, socioeconomic conditions, and improper usage—also play a role. Proper disposal methods, securely closed bins, and community compliance are crucial to ensuring the success of this initiative. With the program expanding and bins increasingly installed across the city, the responsibility largely falls on residents to follow proper usage guidelines. This is particularly relevant as mandatory composting rules and fines will take effect in spring 2025, making compliance a critical component of addressing current challenges.
+
+Further analysis is needed to fully understand the interplay of factors influencing rodent activity near food scrap locations. Socioeconomic dynamics, pedestrian traffic in busy neighborhoods, and bin design (e.g., metal vs. plastic) should be explored to develop more targeted interventions. As the initiative grows, tracking the effects of new rules and public adherence on rat complaints will provide valuable insights into its overall impact. These findings establish a foundation for ongoing evaluation and highlight the importance of a multifaceted approach to managing urban sustainability challenges.
+
+## Proposals for future work
+
+### Improved bin design and placement
+
+Research could explore the effectiveness of different bin designs, such as metal versus plastic, in deterring pests. Testing rat-proof designs or monitoring which types of bins attract fewer complaints could inform future installations. The placement of bins near residential areas, parks, or subway stations could also be optimized based on complaint data.
+
+### Incorporating public engagement
+
+Conducting surveys or interviews with residents to gather qualitative insights about their perceptions of food scrap bins and composting initiatives could enrich the analysis. This feedback could help identify barriers to proper usage and compliance with composting rules.
+
+### Longitudinal studies
+
+Extending the timeframe of analysis to include post-2025 data, when composting becomes mandatory, would allow for a more robust evaluation of the initiative's success. Tracking complaint trends before and after the policy change could reveal its impact on rodent activity.
+
+### Advanced modeling techniques
+
+Using predictive modeling or machine learning, future work could identify neighborhoods most at risk for rodent activity based on variables such as socioeconomic data, bin placement, and seasonal patterns. This would enable proactive pest management strategies.
